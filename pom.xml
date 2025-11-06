@@ -1,0 +1,96 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.nutanix.nutanix-core.ntnx-api.golang-mock-pc</groupId>
+  <artifactId>golang-mock-pc</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>Golang Mock API Service - API Definitions</name>
+  <description>Mock REST API definitions and code generation for Go service</description>
+
+  <properties>
+    <service-parent.version>17.6.0.2921-RELEASE</service-parent.version>
+    <openapi-dev-platform.version>17.6.0.9581-RELEASE</openapi-dev-platform.version>
+    <swagger-codegen.version>3.0.10</swagger-codegen.version>
+    <platform-tools.version>17.6.0.9581-RELEASE</platform-tools.version>
+    <swagger-codegen-version>3.0.10</swagger-codegen-version>
+    <api.defs>golang-mock-api-definitions</api.defs>
+    <exec-maven-plugin-version>1.5.0</exec-maven-plugin-version>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <mapstruct-version>1.4.1.Final</mapstruct-version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <expose.internal.api>true</expose.internal.api>
+  </properties>
+
+  <modules>
+    <module>golang-mock-api-definitions</module>
+    <module>golang-mock-api-codegen</module>
+  </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.nutanix.nutanix-core.ntnx-api.prism-service-parent</groupId>
+        <artifactId>spring-boot-service-parent</artifactId>
+        <version>${service-parent.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.nutanix.nutanix-core.ntnx-api.prism-service-parent</groupId>
+        <artifactId>proto-service-parent</artifactId>
+        <version>${service-parent.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.11</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.1.2</version>
+        <configuration>
+          <forkCount>1</forkCount>
+          <reuseForks>true</reuseForks>
+          <argLine>
+            --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED
+          </argLine>
+        </configuration>
+      </plugin>      
+    </plugins>
+  </build>
+
+  <distributionManagement>
+    <repository>
+      <id>${NEXUS_ID}</id>
+      <url>${NEXUS_URI}</url>
+    </repository>
+  </distributionManagement>
+
+</project>
+

@@ -1,0 +1,8 @@
+port: 9090
+backendServices:
+  - name: golang-mock
+    environments:
+      - platform: pc
+        port: 9090
+        host: localhost
+

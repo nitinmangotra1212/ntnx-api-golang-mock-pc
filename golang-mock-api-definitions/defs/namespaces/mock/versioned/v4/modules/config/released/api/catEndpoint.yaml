@@ -1,0 +1,132 @@
+paths:
+  /cats:
+    get:
+      tags:
+        - "ApiEndpoint(Cat)"
+      description: List all cats with optional filtering and pagination
+      summary: List cats
+      operationId: "listCats"
+      parameters:
+        - name: $page
+          in: query
+          description: Page number (1-based)
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 1
+        - name: $limit
+          in: query
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 50
+        - name: $filter
+          in: query
+          description: OData filter expression
+          required: false
+          schema:
+            type: string
+        - name: $orderby
+          in: query
+          description: OData orderby expression
+          required: false
+          schema:
+            type: string
+        - name: $select
+          in: query
+          description: OData select expression
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of cats retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "ModelRef({/namespaces/mock/versioned/v4/modules/config/released/models/Cat})"
+    
+    post:
+      tags:
+        - "ApiEndpoint(Cat)"
+      description: Create a new cat
+      summary: Create cat
+      operationId: "createCat"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "ModelRef({/namespaces/mock/versioned/v4/modules/config/released/models/Cat})"
+      responses:
+        201:
+          description: Cat created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "ModelRef({/namespaces/mock/versioned/v4/modules/config/released/models/Cat})"
+
+  /cats/{catId}:
+    parameters:
+      - name: catId
+        in: path
+        description: Cat ID
+        required: true
+        schema:
+          type: integer
+          format: int32
+    
+    get:
+      tags:
+        - "ApiEndpoint(Cat)"
+      description: Get cat by ID
+      summary: Get cat
+      operationId: "getCatById"
+      responses:
+        200:
+          description: Cat retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "ModelRef({/namespaces/mock/versioned/v4/modules/config/released/models/Cat})"
+        404:
+          description: Cat not found
+    
+    put:
+      tags:
+        - "ApiEndpoint(Cat)"
+      description: Update cat by ID
+      summary: Update cat
+      operationId: "updateCatById"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "ModelRef({/namespaces/mock/versioned/v4/modules/config/released/models/Cat})"
+      responses:
+        200:
+          description: Cat updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "ModelRef({/namespaces/mock/versioned/v4/modules/config/released/models/Cat})"
+        404:
+          description: Cat not found
+    
+    delete:
+      tags:
+        - "ApiEndpoint(Cat)"
+      description: Delete cat by ID
+      summary: Delete cat
+      operationId: "deleteCatById"
+      responses:
+        204:
+          description: Cat deleted successfully
+        404:
+          description: Cat not found
