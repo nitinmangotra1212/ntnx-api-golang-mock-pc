@@ -1,0 +1,4 @@
+#!/bin/bash
+# Fix for Java 17+ module system issues with dev-platform-maven-plugins
+MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED"
+

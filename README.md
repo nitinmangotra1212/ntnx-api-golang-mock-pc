@@ -1,6 +1,6 @@
 # ntnx-api-golang-mock-pc
 
-API definitions and code generation for ntnx-api-golang-mock service.
+API definitions and code generation for ntnx-api-golang-mock service with **REAL gRPC support**.
 
 ## 📋 Overview
 
@@ -8,7 +8,8 @@ This repository contains:
 - YAML API definitions (OpenAPI specs)
 - Maven-based code generation
 - Auto-generated Go DTOs with $objectType support
-- Protocol Buffer definitions
+- **Protocol Buffer definitions (.proto files)**
+- **✨ gRPC compiled code (.pb.go files) - JUST LIKE GURU!**
 
 ## 🏗️ Structure
 
@@ -35,8 +36,9 @@ ntnx-api-golang-mock-pc/
 - **Java 21+**
 - **Maven 3.8+**
 - **Go 1.23+**
+- **protoc** (for gRPC generation)
 
-### Generate Code
+### Generate DTOs (from YAML)
 
 ```bash
 mvn clean install -s settings.xml
@@ -46,6 +48,21 @@ This generates:
 - `generated-code/dto/src/models/mock/v4/config/config_model.go`
 - Auto-generated constructors (NewCat(), NewLocation(), etc.)
 - Auto-set $objectType and $reserved fields
+
+### Generate gRPC Code (.pb.go files)
+
+```bash
+# Add Go bin to PATH
+export PATH=$PATH:$(go env GOPATH)/bin
+
+# Generate .pb.go files
+./generate-grpc.sh
+```
+
+This generates **real gRPC files** (like guru):
+- `generated-code/protobuf/mock/v4/config/config.pb.go` (11KB)
+- `generated-code/protobuf/mock/v4/config/cat_service.pb.go` (35KB)
+- `generated-code/protobuf/mock/v4/config/cat_service_grpc.pb.go` (19KB) ✨
 
 ## 📦 Usage
 
@@ -72,6 +89,11 @@ replace github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/dto =>
    ```
 
 3. Generated DTOs will have auto-set $objectType!
+
+## 📚 Documentation
+
+- **[CODE_GENERATION_FLOW.md](./CODE_GENERATION_FLOW.md)** - Complete flow from YAML → Proto → .pb.go with flowcharts and file-by-file explanation
+- **[GRPC_FILES_GENERATED.md](./GRPC_FILES_GENERATED.md)** - Explains all generated .pb.go files
 
 ## 🔗 Related
 
