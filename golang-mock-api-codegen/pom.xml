@@ -29,9 +29,22 @@
   </dependencies>
 
   <modules>
+    <!-- Proto messages (from YAML) -->
     <module>golang-mock-protobuf-messages</module>
+    <!-- Proto services: SKIPPED - using manually created cat_service.proto -->
+    <!-- <module>golang-mock-protobuf-services</module> -->
+    <!-- Java DTOs (from YAML) -->
+    <module>golang-mock-java-dto-definitions</module>
+    <!-- Java from Proto -->
+    <module>golang-mock-proto-to-java</module>
+    <!-- Mappers (Java DTO <-> Proto) -->
+    <module>golang-mock-protobuf-mappers</module>
+    <!-- Spring MVC interfaces -->
+    <module>golang-mock-springmvc-interfaces</module>
+    <!-- gRPC Client (final integration) -->
+    <module>golang-mock-grpc-client</module>
+    <!-- Go DTOs and interfaces -->
     <module>golang-mock-go-dto-definitions</module>
-    <!-- Server interfaces skipped - implementing manually with gRPC Gateway pattern -->
     <!-- <module>golang-mock-go-server-interfaces</module> -->
   </modules>
 

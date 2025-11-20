@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>golang-mock-api-codegen</artifactId>
+        <groupId>com.nutanix.nutanix-core.ntnx-api.golang-mock-pc</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>golang-mock-grpc-client</artifactId>
+    <name>Golang Mock gRPC Client</name>
+    <description>Java gRPC client for Golang Mock Service</description>
+
+    <properties>
+        <io.grpc.version>1.37.0</io.grpc.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>golang-mock-springmvc-interfaces</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>golang-mock-java-dto-definitions</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>golang-mock-protobuf-mappers</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>golang-mock-proto-to-java</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.nutanix.nutanix-core.ntnx-api.utils</groupId>
+            <artifactId>error-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+            <version>${io.grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
+            <version>${io.grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+            <version>${io.grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.nutanix.nutanix-core.ntnx-api.utils</groupId>
+            <artifactId>task-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.nutanix.nutanix-core.ntnx-api.utils</groupId>
+            <artifactId>response-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.nutanix.nutanix-core.ntnx-api.utils</groupId>
+            <artifactId>json-utils</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.6.1</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <!-- Clean previous generated code -->
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${project.basedir}/src</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+
+            <!-- Copy proto files from generated-code (manually created + protobuf-messages) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <configuration>
+                            <target>
+                                <!-- Copy proto message files from protobuf-messages module -->
+                                <copy todir="${project.basedir}/src/main/proto" flatten="false">
+                                    <fileset dir="${project.basedir}/../golang-mock-protobuf-messages/target/generated-sources/swagger">
+                                        <include name="**/*.proto"/>
+                                    </fileset>
+                                </copy>
+                                <!-- Copy manually created cat_service.proto -->
+                                <copy todir="${project.basedir}/src/main/proto" flatten="false">
+                                    <fileset dir="${project.basedir}/../../generated-code/protobuf/swagger">
+                                        <include name="mock/v4/config/cat_service.proto"/>
+                                    </fileset>
+                                </copy>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!-- Generate Java from proto files -->
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>0.6.1</version>
+                <configuration>
+                    <protocArtifact>
+                        com.google.protobuf:protoc:3.12.2:exe:osx-x86_64
+                    </protocArtifact>
+                    <pluginId>grpc-java</pluginId>
+                    <pluginArtifact>
+                        io.grpc:protoc-gen-grpc-java:1.37.0:exe:osx-x86_64
+                    </pluginArtifact>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>compile-custom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!-- Generate gRPC client controller code -->
+            <!-- COMMENTED OUT: Requires proto hints in YAML which we don't have -->
+            <!-- For mock service, the Java gRPC stubs from protobuf-maven-plugin are sufficient -->
+            <!--
+            <plugin>
+                <groupId>io.swagger.codegen.v3</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>${swagger-codegen-version}</version>
+                <executions>
+                    <execution>
+                        <id>golang-mock-grpc-client</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>
+                                ${project.build.directory}/${api.defs}-${project.version}/swagger-all-${project.version}.yaml
+                            </inputSpec>
+                            <language>com.nutanix.swagger.codegen.generators.proto.v2.GrpcClientGenerator</language>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <generateModels>false</generateModels>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <generateModelTests>false</generateModelTests>
+                            <generateApiTests>false</generateApiTests>
+                            <generateApis>true</generateApis>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <additionalProperties>
+                                <additionalProperty>enableSelfContainedPackaging=true</additionalProperty>
+                                <additionalProperty>protoPackagePrefix=</additionalProperty>
+                                <additionalProperty>deriveAppMessage=true</additionalProperty>
+                                <additionalProperties>wrapCollections=true</additionalProperties>
+                                <additionalProperty>requestTimeout=25</additionalProperty>
+                                <additionalProperty>enableCircuitBreaker=true</additionalProperty>
+                            </additionalProperties>
+                            <configOptions>
+                                <dateLibrary>java8</dateLibrary>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.nutanix.nutanix-core.ntnx-api.dev-platform</groupId>
+                        <artifactId>dev-platform-codegen-templates</artifactId>
+                        <version>${openapi-dev-platform.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            -->
+            
+            <!-- Add generated sources to classpath -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/swagger/src</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+

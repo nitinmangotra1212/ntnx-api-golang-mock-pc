@@ -1,0 +1,97 @@
+/*
+ * Generated file mock/v4/config/config.proto.
+ *
+ * Product version: 1.0.0-SNAPSHOT
+ *
+ * Part of the GoLang Mock API - REST API for Mock Cat Service
+ *
+ * (c) 2025 Nutanix Inc.  All rights reserved
+ *
+ */
+
+syntax = "proto2";
+
+package mock.v4.config;
+
+option java_multiple_files = true;
+option java_package = "mock.v4.config";
+option go_package = "mock/v4/config";
+
+import "google/protobuf/any.proto";
+
+/*
+ * Map wrapper message
+ */
+message ObjectMapWrapper {
+  /*
+   * Value field in wrapper message
+   */
+  map<string, google.protobuf.Any> value = 1000;
+}
+/*
+ * Cat entity for mock REST API
+ */
+message Cat {
+  /*
+   * Unique identifier for the cat
+   */
+  optional int32 cat_id = 2001;
+  /*
+   * Name of the cat
+   */
+  optional string cat_name = 2002;
+  /*
+   * Type of cat
+   */
+  optional string cat_type = 2003;
+  /*
+   * Description of the cat
+   */
+  optional string description = 2004;
+  /*
+   * Path to cat image file
+   */
+  optional string cat_image_file = 2005;
+  /*
+   * 
+   */
+  optional mock.v4.config.Location location = 2006;
+  /*
+   * 
+   */
+  optional mock.v4.config.ObjectMapWrapper _reserved = 900000;
+}
+/*
+ * Country information
+ */
+message Country {
+  /*
+   * State or province name
+   */
+  optional string state = 2001;
+  /*
+   * 
+   */
+  optional mock.v4.config.ObjectMapWrapper _reserved = 900000;
+}
+/*
+ * Geographical location information
+ */
+message Location {
+  /*
+   * 
+   */
+  optional mock.v4.config.Country country = 2001;
+  /*
+   * City name
+   */
+  optional string city = 2002;
+  /*
+   * ZIP or postal code
+   */
+  optional string zip = 2003;
+  /*
+   * 
+   */
+  optional mock.v4.config.ObjectMapWrapper _reserved = 900000;
+}
