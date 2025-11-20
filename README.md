@@ -97,7 +97,7 @@ replace github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/dto =>
 
 ## 🔗 Related
 
-- **Service Implementation:** [ntnx-api-golang-mock](../ntnx-api-golang-mock)
+- **Service Implementation:** [ntnx-api-golang-mock](https://github.com/nitinmangotra1212/ntnx-api-golang-mock)
 
 ## 📞 Contact
 
