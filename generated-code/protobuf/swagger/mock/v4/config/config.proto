@@ -18,6 +18,7 @@ option java_package = "mock.v4.config";
 option go_package = "mock/v4/config";
 
 import "google/protobuf/any.proto";
+import "mock/v4/error/error.proto";
 
 /*
  * Map wrapper message
@@ -69,6 +70,46 @@ message Country {
    * State or province name
    */
   optional string state = 2001;
+  /*
+   * 
+   */
+  optional mock.v4.config.ObjectMapWrapper _reserved = 900000;
+}
+/*
+ * OneOf item wrapper message
+ */
+message CatArrayWrapper {
+  /*
+   * Value field in oneOf item wrapper message
+   */
+  repeated mock.v4.config.Cat value = 1000;
+}
+/*
+ * OneOf item wrapper message
+ */
+message ErrorResponseWrapper {
+  /*
+   * Value field in oneOf item wrapper message
+   */
+  optional mock.v4.error.ErrorResponse value = 1000;
+}
+/*
+ * 
+ */
+message ListCatsApiResponse {
+  /*
+   * 
+   */
+  oneof data {
+    /*
+     * 
+     */
+    mock.v4.config.CatArrayWrapper cat_array_data = 2001;
+    /*
+     * 
+     */
+    mock.v4.config.ErrorResponseWrapper error_response_data = 400;
+  }
   /*
    * 
    */

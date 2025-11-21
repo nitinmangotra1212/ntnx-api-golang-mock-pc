@@ -1,139 +1,62 @@
 /*
- * gRPC Service Definition for Mock Cat Service
- * Following Nutanix patterns from ntnx-api-guru
+ * Generated file mock/v4/config.proto.
+ *
+ * Product version: 1.0.0-SNAPSHOT
+ *
+ * Part of the GoLang Mock API - REST API for Mock Cat Service
+ *
+ * (c) 2025 Nutanix Inc.  All rights reserved
+ *
  */
 
-syntax = "proto3";
+syntax = "proto2";
 
 package mock.v4.config;
 
 option java_multiple_files = true;
-option java_package = "com.nutanix.mock.v4.config";
-option go_package = "github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/protobuf/mock/v4/config;config";
+option java_package = "mock.v4.config";
+option go_package = "mock/v4/config";
 
-// Import the message definitions
+import "mock/v4/api_version.proto";
+
+import "mock/v4/http_method_options.proto";
 import "mock/v4/config/config.proto";
 
-// ============================================================================
-// Request/Response Messages for gRPC
-// ============================================================================
-
-message ListCatsRequest {
-  int32 page = 1;
-  int32 limit = 2;
-  string filter = 3;
-  string orderby = 4;
-}
-
-message ListCatsResponse {
-  repeated Cat cats = 1;
-  int32 total_count = 2;
-  int32 page = 3;
-  int32 limit = 4;
-}
-
-message GetCatRequest {
-  int32 cat_id = 1;
-}
-
-message GetCatResponse {
-  Cat cat = 1;
-}
-
-message CreateCatRequest {
-  Cat cat = 1;
-}
-
-message CreateCatResponse {
-  Cat cat = 1;
-}
-
-message UpdateCatRequest {
-  int32 cat_id = 1;
-  Cat cat = 2;
-}
-
-message UpdateCatResponse {
-  Cat cat = 1;
-}
-
-message DeleteCatRequest {
-  int32 cat_id = 1;
-}
-
-message DeleteCatResponse {
-  bool success = 1;
-  string message = 2;
-}
-
-// ============================================================================
-// Async Task Messages
-// ============================================================================
-
-message GetCatAsyncRequest {
-  int32 cat_id = 1;
-}
-
-message GetCatAsyncResponse {
-  string task_id = 1;
-  string poll_url = 2;
-  string message = 3;
-}
-
-message Task {
-  string task_id = 1;
-  int32 percentage_complete = 2;
-  string status = 3;  // PENDING, IN_PROGRESS, COMPLETED, FAILED
-  string message = 4;
-  Cat object_returned = 5;  // The result when completed
-}
-
-message GetTaskRequest {
-  string task_id = 1;
-}
-
-message GetTaskResponse {
-  Task task = 1;
-}
-
-message CreateTaskRequest {
-  Task task = 1;
-}
-
-message CreateTaskResponse {
-  Task task = 1;
-}
-
-message UpdateTaskRequest {
-  string task_id = 1;
-  Task task = 2;
-}
-
-message UpdateTaskResponse {
-  Task task = 1;
-}
-
-// ============================================================================
-// gRPC Service Definitions
-// ============================================================================
-
-// CatService - Main API service for Cat operations
 service CatService {
-  // Synchronous operations
-  rpc ListCats(ListCatsRequest) returns (ListCatsResponse);
-  rpc GetCat(GetCatRequest) returns (GetCatResponse);
-  rpc CreateCat(CreateCatRequest) returns (CreateCatResponse);
-  rpc UpdateCat(UpdateCatRequest) returns (UpdateCatResponse);
-  rpc DeleteCat(DeleteCatRequest) returns (DeleteCatResponse);
-  
-  // Async operation - returns task ID immediately
-  rpc GetCatAsync(GetCatAsyncRequest) returns (GetCatAsyncResponse);
+    option (ntnx_api_version) = {
+    MAJOR: "4",
+    MINOR: "1"    };
+
+
+  /*
+   * uri: /mock/v4/config/cats
+   * http method: GET
+   * List cats
+   * List all cats
+   */
+  rpc listCats(ListCatsArg) returns (ListCatsRet) {
+    option (ntnx_api_http) = {
+      GET: "/mock/v4/config/cats"
+    };
+  }
 }
 
-// TaskService - Task tracking service (separate from main API)
-service TaskService {
-  rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse);
-  rpc GetTask(GetTaskRequest) returns (GetTaskResponse);
-  rpc UpdateTask(UpdateTaskRequest) returns (UpdateTaskResponse);
+/*
+ * message containing all attributes expected in the listCats request
+ */
+message ListCatsArg {
 }
 
+/*
+ * message containing all attributes expected in the listCats response
+ */
+message ListCatsRet {
+  /*
+   * field containing expected response content
+   */
+  optional mock.v4.config.ListCatsApiResponse content = 999;
+  /*
+   * map containing headers expected in response
+   */
+  map<string, string> reserved = 1000;
+}

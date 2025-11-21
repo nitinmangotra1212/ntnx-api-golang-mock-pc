@@ -1,39 +1,48 @@
 #!/bin/bash
-# Script to publish generated protobuf code to the generated-code directory
+#
+# CHANGE THIS FILE TO PUSH YOUR GO CODE TO A GO REPOSITORY
+API_SERVER_SOURCE_PATH=../../generated-code
+PROTO_MESSAGES_PATH=$API_SERVER_SOURCE_PATH/protobuf/swagger
+ 
+mkdir -p $PROTO_MESSAGES_PATH
+cp -r target/generated-sources/swagger/* $PROTO_MESSAGES_PATH/
 
-set -e
+echo "Start"
+cd $PROTO_MESSAGES_PATH
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PROJECT_ROOT="$(dirname "$(dirname "$(dirname "$SCRIPT_DIR")")")"
-GENERATED_SRC="$SCRIPT_DIR/../target/generated-sources"
-OUTPUT_DIR="$PROJECT_ROOT/generated-code/protobuf"
-
-echo "Publishing protobuf code..."
-echo "Source: $GENERATED_SRC"
-echo "Output: $OUTPUT_DIR"
-
-# Create output directory
-mkdir -p "$OUTPUT_DIR"
-
-# Copy generated proto files to output directory
-if [ -d "$GENERATED_SRC" ]; then
-  echo "Copying generated protobuf files..."
-  cp -r "$GENERATED_SRC"/* "$OUTPUT_DIR/" || true
-  echo "✅ Protobuf code published successfully"
+# Check if protoc-gen-go is available
+if command -v protoc-gen-go &> /dev/null; then
+    # Generating go code from proto files
+    find . -name "*.proto" -exec sh -c 'protoc --go_out=. --go-grpc_out=. "$0"' {} \;
+    if [ $? -ne 0 ]; then
+        echo "⚠️  Warning: Failed to compile proto files to Go (protoc-gen-go may not be installed)"
+        echo "   Proto files copied successfully, but Go compilation skipped"
+    fi
+    
+    if find "." -type f -name "*pb.go" | grep -q .; then
+        echo "✅ Go files generated from protobuf messages"
+    else
+        echo "⚠️  Warning: No Go files found (may be generated later)"
+    fi
 else
-  echo "⚠️  No generated sources found at $GENERATED_SRC"
+    echo "⚠️  Warning: protoc-gen-go not found in PATH"
+    echo "   Proto files copied successfully, but Go compilation skipped"
+    echo "   Go files will be generated when protoc-gen-go is available"
 fi
 
-# Compile proto files to Go using protoc
-echo "Compiling proto files to Go..."
-cd "$OUTPUT_DIR"
+# Correcting import statements of go files generated from proto files
+export old_path_common="common/"
+export new_path_common="github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/protobuf/common/"
+export folder_path=$(pwd)
 
-# Find and compile all .proto files
-find . -name "*.proto" -type f | while read proto_file; do
-  dir=$(dirname "$proto_file")
-  echo "Compiling $proto_file..."
-  protoc --go_out=. --go_opt=paths=source_relative --proto_path=. "$proto_file" || echo "Failed to compile $proto_file"
+echo $folder_path
+for file in $(find $folder_path -type f)
+do
+    if [[ -f "$file" && "$file" =~ \.go$ ]]; then
+        echo " file name is $file"
+        sed -i  "s#$old_path_common#$new_path_common#g" "$file"
+        sed -i '' "s#$old_path_common#$new_path_common#g" "$file"
+    fi
 done
-
-echo "✅ Proto compilation complete"
+echo "Done"
 

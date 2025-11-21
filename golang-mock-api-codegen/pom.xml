@@ -6,7 +6,7 @@
   <parent>
     <artifactId>golang-mock-pc</artifactId>
     <groupId>com.nutanix.nutanix-core.ntnx-api.golang-mock-pc</groupId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>17.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>golang-mock-api-codegen</artifactId>
@@ -20,7 +20,7 @@
       <groupId>com.nutanix.nutanix-core.ntnx-api.golang-mock-pc</groupId>
       <artifactId>${api.defs}</artifactId>
       <version>${project.version}</version>
-      <type>tar.gz</type>
+      <type>tgz</type>
     </dependency>
     <dependency>
       <groupId>com.google.protobuf</groupId>
@@ -29,23 +29,16 @@
   </dependencies>
 
   <modules>
-    <!-- Proto messages (from YAML) -->
-    <module>golang-mock-protobuf-messages</module>
-    <!-- Proto services: SKIPPED - using manually created cat_service.proto -->
-    <!-- <module>golang-mock-protobuf-services</module> -->
-    <!-- Java DTOs (from YAML) -->
     <module>golang-mock-java-dto-definitions</module>
-    <!-- Java from Proto -->
-    <module>golang-mock-proto-to-java</module>
-    <!-- Mappers (Java DTO <-> Proto) -->
-    <module>golang-mock-protobuf-mappers</module>
-    <!-- Spring MVC interfaces -->
     <module>golang-mock-springmvc-interfaces</module>
-    <!-- gRPC Client (final integration) -->
-    <module>golang-mock-grpc-client</module>
-    <!-- Go DTOs and interfaces -->
     <module>golang-mock-go-dto-definitions</module>
-    <!-- <module>golang-mock-go-server-interfaces</module> -->
+<!--    <module>golang-mock-go-server-interfaces</module>-->
+    <module>golang-mock-go-edm-definitions</module>
+    <module>golang-mock-protobuf-messages</module>
+    <module>golang-mock-proto-to-java</module>
+    <module>golang-mock-protobuf-services</module>
+    <module>golang-mock-protobuf-mappers</module>
+    <module>golang-mock-grpc-client</module>
   </modules>
 
   <build>
@@ -66,11 +59,11 @@
                   <groupId>com.nutanix.nutanix-core.ntnx-api.golang-mock-pc</groupId>
                   <artifactId>${api.defs}</artifactId>
                   <version>${project.version}</version>
-                  <type>tar.gz</type>
+                  <type>tgz</type>
                   <overWrite>false</overWrite>
                 </artifactItem>
               </artifactItems>
-              <outputDirectory>${project.build.directory}/${api.defs}-${project.version}</outputDirectory>
+              <outputDirectory>${project.build.directory}</outputDirectory>
               <overWriteReleases>false</overWriteReleases>
               <overWriteSnapshots>true</overWriteSnapshots>
             </configuration>

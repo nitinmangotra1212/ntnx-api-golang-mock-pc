@@ -5,7 +5,7 @@
     <parent>
         <artifactId>golang-mock-api-codegen</artifactId>
         <groupId>com.nutanix.nutanix-core.ntnx-api.golang-mock-pc</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>17.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,9 +14,10 @@
     <description>Java gRPC client for Golang Mock Service</description>
 
     <properties>
-        <io.grpc.version>1.37.0</io.grpc.version>
+        <io.grpc.version>1.50.2</io.grpc.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.skip>true</maven.compiler.skip>
     </properties>
 
     <dependencies>
@@ -61,6 +62,11 @@
             <version>${io.grpc.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.21.7</version>
+        </dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
@@ -91,7 +97,6 @@
             </extension>
         </extensions>
         <plugins>
-            <!-- Clean previous generated code -->
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>3.1.0</version>
@@ -103,8 +108,6 @@
                     </filesets>
                 </configuration>
             </plugin>
-
-            <!-- Copy proto files from generated-code (manually created + protobuf-messages) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -114,16 +117,9 @@
                         <phase>validate</phase>
                         <configuration>
                             <target>
-                                <!-- Copy proto message files from protobuf-messages module -->
                                 <copy todir="${project.basedir}/src/main/proto" flatten="false">
-                                    <fileset dir="${project.basedir}/../golang-mock-protobuf-messages/target/generated-sources/swagger">
+                                    <fileset dir="${project.basedir}/../golang-mock-protobuf-services/target/generated-sources/swagger">
                                         <include name="**/*.proto"/>
-                                    </fileset>
-                                </copy>
-                                <!-- Copy manually created cat_service.proto -->
-                                <copy todir="${project.basedir}/src/main/proto" flatten="false">
-                                    <fileset dir="${project.basedir}/../../generated-code/protobuf/swagger">
-                                        <include name="mock/v4/config/cat_service.proto"/>
                                     </fileset>
                                 </copy>
                             </target>
@@ -134,19 +130,17 @@
                     </execution>
                 </executions>
             </plugin>
-            
-            <!-- Generate Java from proto files -->
             <plugin>
                 <groupId>org.xolstice.maven.plugins</groupId>
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <version>0.6.1</version>
                 <configuration>
                     <protocArtifact>
-                        com.google.protobuf:protoc:3.12.2:exe:osx-x86_64
+                        com.google.protobuf:protoc:3.21.7:exe:${os.detected.classifier}
                     </protocArtifact>
                     <pluginId>grpc-java</pluginId>
                     <pluginArtifact>
-                        io.grpc:protoc-gen-grpc-java:1.37.0:exe:osx-x86_64
+                        io.grpc:protoc-gen-grpc-java:1.50.2:exe:${os.detected.classifier}
                     </pluginArtifact>
                 </configuration>
                 <executions>
@@ -158,11 +152,6 @@
                     </execution>
                 </executions>
             </plugin>
-            
-            <!-- Generate gRPC client controller code -->
-            <!-- COMMENTED OUT: Requires proto hints in YAML which we don't have -->
-            <!-- For mock service, the Java gRPC stubs from protobuf-maven-plugin are sufficient -->
-            <!--
             <plugin>
                 <groupId>io.swagger.codegen.v3</groupId>
                 <artifactId>swagger-codegen-maven-plugin</artifactId>
@@ -207,9 +196,92 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            -->
-            
-            <!-- Add generated sources to classpath -->
+            <!-- Post-process generated files to fix invalid Java class names (hyphens) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>fix-class-names</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!-- Fix all hyphens in Java identifiers (but not in strings) -->
+                                <!-- Step 1: Fix class name -->
+                                <replaceregexp byline="true" flags="g">
+                                    <regexp pattern="Golang-mockGrpcConfiguration"/>
+                                    <substitution expression="GolangMockGrpcConfiguration"/>
+                                    <fileset dir="${project.build.directory}/generated-sources/swagger/src">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                </replaceregexp>
+                                <!-- Step 2: Fix method names getGolang-mock* -> getGolangMock* -->
+                                <replaceregexp byline="true" flags="g">
+                                    <regexp pattern="getGolang-mock([A-Z])"/>
+                                    <substitution expression="getGolangMock\1"/>
+                                    <fileset dir="${project.build.directory}/generated-sources/swagger/src">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                </replaceregexp>
+                                <!-- Step 3: Fix variable/field names: golang-mockX -> golangMockX (where X is uppercase) -->
+                                <replaceregexp byline="true" flags="g">
+                                    <regexp pattern="golang-mock([A-Z])"/>
+                                    <substitution expression="golangMock\1"/>
+                                    <fileset dir="${project.build.directory}/generated-sources/swagger/src">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                </replaceregexp>
+                                <!-- Step 4: Fix this.golang-mock -> this.golangMock -->
+                                <replaceregexp byline="true" flags="g">
+                                    <regexp pattern="this\.golang-mock"/>
+                                    <substitution expression="this.golangMock"/>
+                                    <fileset dir="${project.build.directory}/generated-sources/swagger/src">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                </replaceregexp>
+                                <!-- Step 5: Fix Map declarations: Map&lt;...&gt; golang-mockX -> golangMockX -->
+                                <replaceregexp byline="true" flags="g">
+                                    <regexp pattern="(Map[^;]*)\s+golang-mock([A-Z])"/>
+                                    <substitution expression="\1 golangMock\2"/>
+                                    <fileset dir="${project.build.directory}/generated-sources/swagger/src">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                </replaceregexp>
+                                <!-- Step 6: Fix parameter names in method signatures: golang-mockX -> golangMockX -->
+                                <replaceregexp byline="true" flags="g">
+                                    <regexp pattern="\([^)]*golang-mock([A-Z])"/>
+                                    <substitution expression="(golangMock\1"/>
+                                    <fileset dir="${project.build.directory}/generated-sources/swagger/src">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                </replaceregexp>
+                                <!-- Step 7: Fix controller signature - remove CompletableFuture wrapper -->
+                                <!-- Change: CompletableFuture<ResponseEntity<...>> -> ResponseEntity<...> -->
+                                <replaceregexp byline="true" flags="g">
+                                    <regexp pattern="public CompletableFuture&lt;ResponseEntity&lt;MappingJacksonValue&gt;&gt; listCats"/>
+                                    <substitution expression="public ResponseEntity&lt;MappingJacksonValue&gt; listCats"/>
+                                    <fileset dir="${project.build.directory}/generated-sources/swagger/src">
+                                        <include name="**/*Controller.java"/>
+                                    </fileset>
+                                </replaceregexp>
+                                <!-- Step 8: Fix CompletableFuture issue using script -->
+                                <exec executable="bash" failonerror="false">
+                                    <arg value="${project.basedir}/scripts/fix-completable-future.sh"/>
+                                    <arg value="${project.build.directory}/generated-sources/swagger/src/mock/v4/config/MockConfigCatController.java"/>
+                                </exec>
+                                <!-- Rename the file -->
+                                <move file="${project.build.directory}/generated-sources/swagger/src/mock/v4/Golang-mockGrpcConfiguration.java"
+                                      tofile="${project.build.directory}/generated-sources/swagger/src/mock/v4/GolangMockGrpcConfiguration.java"
+                                      failonerror="false"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -229,8 +301,18 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
 </project>
-
