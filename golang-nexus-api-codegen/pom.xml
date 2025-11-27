@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <parent>
+    <artifactId>golang-nexus-pc</artifactId>
+    <groupId>com.nutanix.nutanix-core.ntnx-api.golang-nexus-pc</groupId>
+    <version>17.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>golang-nexus-api-codegen</artifactId>
+  <modelVersion>4.0.0</modelVersion>
+  <packaging>pom</packaging>
+
+  <name>Nexus API Client and Server SDKs</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.nutanix.nutanix-core.ntnx-api.golang-nexus-pc</groupId>
+      <artifactId>${api.defs}</artifactId>
+      <version>${project.version}</version>
+      <type>tgz</type>
+    </dependency>
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+    </dependency>
+  </dependencies>
+
+  <modules>
+    <module>golang-nexus-java-dto-definitions</module>
+    <module>golang-nexus-springmvc-interfaces</module>
+    <module>golang-nexus-go-dto-definitions</module>
+<!--    <module>golang-nexus-go-server-interfaces</module>-->
+    <module>golang-nexus-go-edm-definitions</module>
+    <module>golang-nexus-protobuf-messages</module>
+    <module>golang-nexus-proto-to-java</module>
+    <module>golang-nexus-protobuf-services</module>
+    <module>golang-nexus-protobuf-mappers</module>
+    <module>golang-nexus-grpc-client</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>com.nutanix.nutanix-core.ntnx-api.golang-nexus-pc</groupId>
+                  <artifactId>${api.defs}</artifactId>
+                  <version>${project.version}</version>
+                  <type>tgz</type>
+                  <overWrite>false</overWrite>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.build.directory}</outputDirectory>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+

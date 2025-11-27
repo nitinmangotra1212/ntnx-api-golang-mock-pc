@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>golang-nexus-api-codegen</artifactId>
+        <groupId>com.nutanix.nutanix-core.ntnx-api.golang-nexus-pc</groupId>
+        <version>17.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>golang-nexus-grpc-client</artifactId>
+    <name>Golang Nexus gRPC Client</name>
+    <description>Java gRPC client for Golang Nexus Service</description>
+
+    <properties>
+        <io.grpc.version>1.50.2</io.grpc.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>golang-nexus-springmvc-interfaces</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>golang-nexus-java-dto-definitions</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>golang-nexus-protobuf-mappers</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>golang-nexus-proto-to-java</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.nutanix.nutanix-core.ntnx-api.utils</groupId>
+            <artifactId>error-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+            <version>${io.grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
+            <version>${io.grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+            <version>${io.grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.21.7</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.nutanix.nutanix-core.ntnx-api.utils</groupId>
+            <artifactId>task-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.nutanix.nutanix-core.ntnx-api.utils</groupId>
+            <artifactId>response-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.nutanix.nutanix-core.ntnx-api.utils</groupId>
+            <artifactId>json-utils</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.6.1</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${project.basedir}/src</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <configuration>
+                            <target>
+                                <copy todir="${project.basedir}/src/main/proto" flatten="false">
+                                    <fileset dir="${project.basedir}/../golang-nexus-protobuf-services/target/generated-sources/swagger">
+                                        <include name="**/*.proto"/>
+                                    </fileset>
+                                </copy>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>0.6.1</version>
+                <configuration>
+                    <protocArtifact>
+                        com.google.protobuf:protoc:3.21.7:exe:${os.detected.classifier}
+                    </protocArtifact>
+                    <pluginId>grpc-java</pluginId>
+                    <pluginArtifact>
+                        io.grpc:protoc-gen-grpc-java:1.50.2:exe:${os.detected.classifier}
+                    </pluginArtifact>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>compile-custom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.swagger.codegen.v3</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>${swagger-codegen-version}</version>
+                <executions>
+                    <execution>
+                        <id>golang-nexus-grpc-client</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>
+                                ${project.build.directory}/${api.defs}-${project.version}/swagger-all-${project.version}.yaml
+                            </inputSpec>
+                            <language>com.nutanix.swagger.codegen.generators.proto.v2.GrpcClientGenerator</language>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <generateModels>false</generateModels>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <generateModelTests>false</generateModelTests>
+                            <generateApiTests>false</generateApiTests>
+                            <generateApis>true</generateApis>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <additionalProperties>
+                                <additionalProperty>enableSelfContainedPackaging=true</additionalProperty>
+                                <additionalProperty>protoPackagePrefix=</additionalProperty>
+                                <additionalProperty>deriveAppMessage=true</additionalProperty>
+                                <additionalProperties>wrapCollections=true</additionalProperties>
+                                <additionalProperty>requestTimeout=25</additionalProperty>
+                                <additionalProperty>enableCircuitBreaker=true</additionalProperty>
+                            </additionalProperties>
+                            <configOptions>
+                                <dateLibrary>java8</dateLibrary>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.nutanix.nutanix-core.ntnx-api.dev-platform</groupId>
+                        <artifactId>dev-platform-codegen-templates</artifactId>
+                        <version>${openapi-dev-platform.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <!-- Post-process generated files to fix invalid Java class names (hyphens) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>fix-class-names</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!-- Fix all hyphens in Java identifiers (but not in strings) -->
+                                <!-- Step 1: Fix class name -->
+                                <replaceregexp byline="true" flags="g">
+                                    <regexp pattern="Golang-mockGrpcConfiguration"/>
+                                    <substitution expression="GolangMockGrpcConfiguration"/>
+                                    <fileset dir="${project.build.directory}/generated-sources/swagger/src">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                </replaceregexp>
+                                <!-- Step 2: Fix method names getGolang-mock* -> getGolangMock* -->
+                                <replaceregexp byline="true" flags="g">
+                                    <regexp pattern="getGolang-mock([A-Z])"/>
+                                    <substitution expression="getGolangMock\1"/>
+                                    <fileset dir="${project.build.directory}/generated-sources/swagger/src">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                </replaceregexp>
+                                <!-- Step 3: Fix variable/field names: golang-nexusX -> golangMockX (where X is uppercase) -->
+                                <replaceregexp byline="true" flags="g">
+                                    <regexp pattern="golang-nexus([A-Z])"/>
+                                    <substitution expression="golangMock\1"/>
+                                    <fileset dir="${project.build.directory}/generated-sources/swagger/src">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                </replaceregexp>
+                                <!-- Step 4: Fix this.golang-nexus -> this.golangMock -->
+                                <replaceregexp byline="true" flags="g">
+                                    <regexp pattern="this\.golang-nexus"/>
+                                    <substitution expression="this.golangMock"/>
+                                    <fileset dir="${project.build.directory}/generated-sources/swagger/src">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                </replaceregexp>
+                                <!-- Step 5: Fix Map declarations: Map&lt;...&gt; golang-nexusX -> golangMockX -->
+                                <replaceregexp byline="true" flags="g">
+                                    <regexp pattern="(Map[^;]*)\s+golang-nexus([A-Z])"/>
+                                    <substitution expression="\1 golangMock\2"/>
+                                    <fileset dir="${project.build.directory}/generated-sources/swagger/src">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                </replaceregexp>
+                                <!-- Step 6: Fix parameter names in method signatures: golang-nexusX -> golangMockX -->
+                                <replaceregexp byline="true" flags="g">
+                                    <regexp pattern="\([^)]*golang-nexus([A-Z])"/>
+                                    <substitution expression="(golangMock\1"/>
+                                    <fileset dir="${project.build.directory}/generated-sources/swagger/src">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                </replaceregexp>
+                                <!-- Step 7: Fix controller signature - remove CompletableFuture wrapper -->
+                                <!-- Change: CompletableFuture<ResponseEntity<...>> -> ResponseEntity<...> -->
+                                <replaceregexp byline="true" flags="g">
+                                    <regexp pattern="public CompletableFuture&lt;ResponseEntity&lt;MappingJacksonValue&gt;&gt; listCats"/>
+                                    <substitution expression="public ResponseEntity&lt;MappingJacksonValue&gt; listCats"/>
+                                    <fileset dir="${project.build.directory}/generated-sources/swagger/src">
+                                        <include name="**/*Controller.java"/>
+                                    </fileset>
+                                </replaceregexp>
+                                <!-- Step 8: Fix CompletableFuture method body using dedicated script -->
+                                <exec executable="bash" failonerror="false">
+                                    <arg value="${project.basedir}/scripts/fix-controller-complete.sh"/>
+                                    <arg value="${project.build.directory}/generated-sources/swagger/src/nexus/v4/config/NexusConfigItemController.java"/>
+                                </exec>
+                                <!-- Rename the file -->
+                                <move file="${project.build.directory}/generated-sources/swagger/src/nexus/v4/Golang-mockGrpcConfiguration.java"
+                                      tofile="${project.build.directory}/generated-sources/swagger/src/nexus/v4/GolangMockGrpcConfiguration.java"
+                                      failonerror="false"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-sources/swagger/src</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

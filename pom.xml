@@ -2,13 +2,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.nutanix.nutanix-core.ntnx-api.golang-mock-pc</groupId>
-  <artifactId>golang-mock-pc</artifactId>
+  <groupId>com.nutanix.nutanix-core.ntnx-api.golang-nexus-pc</groupId>
+  <artifactId>golang-nexus-pc</artifactId>
   <version>17.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Golang Mock API Service - API Definitions</name>
-  <description>Mock REST API definitions and code generation for Go service</description>
+  <name>Golang Nexus API Service - API Definitions</name>
+  <description>Nexus REST API definitions and code generation for Go service</description>
 
   <properties>
     <service-parent.version>17.6.0.2921-RELEASE</service-parent.version>
@@ -16,7 +16,7 @@
     <swagger-codegen.version>3.0.10</swagger-codegen.version>
     <platform-tools.version>17.6.0.9581-RELEASE</platform-tools.version>
     <swagger-codegen-version>3.0.10</swagger-codegen-version>
-    <api.defs>golang-mock-api-definitions</api.defs>
+    <api.defs>golang-nexus-api-definitions</api.defs>
     <exec-maven-plugin-version>1.5.0</exec-maven-plugin-version>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
@@ -26,8 +26,8 @@
   </properties>
 
   <modules>
-    <module>golang-mock-api-definitions</module>
-    <module>golang-mock-api-codegen</module>
+    <module>golang-nexus-api-definitions</module>
+    <module>golang-nexus-api-codegen</module>
   </modules>
 
   <dependencyManagement>

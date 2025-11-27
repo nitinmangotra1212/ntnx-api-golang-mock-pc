@@ -1,0 +1,28 @@
+paths:
+  /items:
+    get:
+      tags:
+        - "ApiEndpoint(Item)"
+      description: List all items
+      summary: List items
+      operationId: "listItems"
+      responses:
+        200:
+          description: List of items retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "ModelRef({/namespaces/nexus/versioned/v4/modules/config/released/models/Item})"
+        x-api-responses:
+          responseModelName: "ListItemsApiResponse"
+          template: ext:common:/namespaces/common/versioned/v1/modules/response/released/models/apiResponse
+        x-codegen-hint:
+          $any:
+            - type: entity-identifier
+              properties:
+                identifiers:
+                  - type: "ModelRef({/namespaces/nexus/versioned/v4/modules/config/released/models/Item})"
+                    container: "array"
+                    index: 2001

@@ -1,0 +1,62 @@
+/*
+ * Generated file nexus/v4/config.proto.
+ *
+ * Product version: 1.0.0-SNAPSHOT
+ *
+ * Part of the GoLang Mock API - REST API for Mock Item Service
+ *
+ * (c) 2025 Nutanix Inc.  All rights reserved
+ *
+ */
+
+syntax = "proto2";
+
+package nexus.v4.config;
+
+option java_multiple_files = true;
+option java_package = "nexus.v4.config";
+option go_package = "nexus/v4/config";
+
+import "nexus/v4/api_version.proto";
+
+import "nexus/v4/http_method_options.proto";
+import "nexus/v4/config/config.proto";
+
+service ItemService {
+    option (ntnx_api_version) = {
+    MAJOR: "4",
+    MINOR: "1"    };
+
+
+  /*
+   * uri: /nexus/v4/config/items
+   * http method: GET
+   * List items
+   * List all items
+   */
+  rpc listItems(ListItemsArg) returns (ListItemsRet) {
+    option (ntnx_api_http) = {
+      GET: "/nexus/v4/config/items"
+    };
+  }
+}
+
+/*
+ * message containing all attributes expected in the listItems request
+ */
+message ListItemsArg {
+}
+
+/*
+ * message containing all attributes expected in the listItems response
+ */
+message ListItemsRet {
+  /*
+   * field containing expected response content
+   */
+  optional nexus.v4.config.ListItemsApiResponse content = 999;
+  /*
+   * map containing headers expected in response
+   */
+  map<string, string> reserved = 1000;
+}

@@ -3,7 +3,7 @@
 //
 // Product version: 1.0.0-SNAPSHOT
 //
-// Part of the GoLang Mock API - REST API for Mock Cat Service
+// Part of the GoLang Mock API - REST API for Mock Item Service
 //
 // (c) 2025 Nutanix Inc.  All rights reserved
 //
@@ -17,7 +17,7 @@
 package error
 
 import (
-	config "github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/protobuf/common/v1/config"
+	config "github.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/protobuf/common/v1/config"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	anypb "google.golang.org/protobuf/types/known/anypb"
@@ -321,10 +321,10 @@ func (x *SchemaValidationErrorWrapper) GetValue() *SchemaValidationError {
 	return nil
 }
 
-// An error response indicates that the operation has failed either due to a client error(4XX) or server error(5XX). Please look at the HTTP status code and namespace specific error code and error message for further details.
+// An error response indiitemes that the operation has failed either due to a client error(4XX) or server error(5XX). Please look at the HTTP status code and namespace specific error code and error message for further details.
 type ErrorResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// An error response indicates that the operation has failed either due to a client error(4XX) or server error(5XX). Please look at the HTTP status code and namespace specific error code and error message for further details.
+	// An error response indiitemes that the operation has failed either due to a client error(4XX) or server error(5XX). Please look at the HTTP status code and namespace specific error code and error message for further details.
 	//
 	// Types that are valid to be assigned to Error:
 	//
@@ -554,7 +554,7 @@ func (x *SchemaValidationError) GetXReserved() *ObjectMapWrapper {
 type SchemaValidationErrorMessage struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The part of the request that failed validation. Validation can fail for path, query parameters, and request body.
-	Location *string `protobuf:"bytes,201,opt,name=location" json:"location,omitempty"`
+	Loitemion *string `protobuf:"bytes,201,opt,name=loitemion" json:"loitemion,omitempty"`
 	// The detailed message for the validation error.
 	Message *string `protobuf:"bytes,202,opt,name=message" json:"message,omitempty"`
 	// The path of the attribute that failed validation in the schema.
@@ -594,9 +594,9 @@ func (*SchemaValidationErrorMessage) Descriptor() ([]byte, []int) {
 	return file_mock_v4_error_error_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *SchemaValidationErrorMessage) GetLocation() string {
-	if x != nil && x.Location != nil {
-		return *x.Location
+func (x *SchemaValidationErrorMessage) GetLoitemion() string {
+	if x != nil && x.Loitemion != nil {
+		return *x.Loitemion
 	}
 	return ""
 }
@@ -626,7 +626,7 @@ var File_mock_v4_error_error_proto protoreflect.FileDescriptor
 
 const file_mock_v4_error_error_proto_rawDesc = "" +
 	"\n" +
-	"\x19mock/v4/error/error.proto\x12\rmock.v4.error\x1a\x1dgithub.com/nutanix/ntnx-api-golang-mock-pc/generated-code/protobuf/common/v1/config/config.proto\x1a\x19google/protobuf/any.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x8f\x01\n" +
+	"\x19mock/v4/error/error.proto\x12\rmock.v4.error\x1a\x1dgithub.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/protobuf/common/v1/config/config.proto\x1a\x19google/protobuf/any.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x8f\x01\n" +
 	"\x10StringMapWrapper\x12A\n" +
 	"\x05value\x18\xe8\a \x03(\v2*.mock.v4.error.StringMapWrapper.ValueEntryR\x05value\x1a8\n" +
 	"\n" +
@@ -667,9 +667,9 @@ const file_mock_v4_error_error_proto_rawDesc = "" +
 	"\x05error\x18\xcb\x01 \x01(\tR\x05error\x12\x13\n" +
 	"\x04path\x18\xcc\x01 \x01(\tR\x04path\x12t\n" +
 	"\x19validation_error_messages\x18\xcd\x01 \x01(\v27.mock.v4.error.SchemaValidationErrorMessageArrayWrapperR\x17validationErrorMessages\x12>\n" +
-	"\t_reserved\x18\xa0\xf76 \x01(\v2\x1f.mock.v4.error.ObjectMapWrapperR\bReserved\"\xbe\x01\n" +
-	"\x1cSchemaValidationErrorMessage\x12\x1b\n" +
-	"\blocation\x18\xc9\x01 \x01(\tR\blocation\x12\x19\n" +
+	"\t_reserved\x18\xa0\xf76 \x01(\v2\x1f.mock.v4.error.ObjectMapWrapperR\bReserved\"\xc0\x01\n" +
+	"\x1cSchemaValidationErrorMessage\x12\x1d\n" +
+	"\tloitemion\x18\xc9\x01 \x01(\tR\tloitemion\x12\x19\n" +
 	"\amessage\x18\xca\x01 \x01(\tR\amessage\x12&\n" +
 	"\x0eattribute_path\x18\xcb\x01 \x01(\tR\rattributePath\x12>\n" +
 	"\t_reserved\x18\xa0\xf76 \x01(\v2\x1f.mock.v4.error.ObjectMapWrapperR\bReservedB \n" +

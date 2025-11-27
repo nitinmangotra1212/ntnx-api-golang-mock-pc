@@ -97,7 +97,7 @@ var file_mock_v4_api_version_proto_extTypes = []protoimpl.ExtensionInfo{
 		Field:         2000,
 		Name:          "mock.v4.ntnx_api_version",
 		Tag:           "bytes,2000,opt,name=ntnx_api_version",
-		Filename:      "github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/protobuf/mock/v4/api_version.proto",
+		Filename:      "mock/v4/api_version.proto",
 	},
 }
 

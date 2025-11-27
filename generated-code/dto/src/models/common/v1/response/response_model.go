@@ -3,7 +3,7 @@
  *
  * Product version: 1.0.0-SNAPSHOT
  *
- * Part of the GoLang Mock API - REST API for Mock Cat Service
+ * Part of the GoLang Mock API - REST API for Mock Item Service
  *
  * (c) 2025 Nutanix Inc.  All rights reserved
  *
@@ -14,7 +14,7 @@
 */
 package response
 import (
-  import1 "github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/dto/models/common/v1/config"
+  import1 "github.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/dto/models/common/v1/config"
   "encoding/json"
 )
 /*

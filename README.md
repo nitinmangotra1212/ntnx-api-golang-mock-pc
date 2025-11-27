@@ -1,6 +1,6 @@
-# ntnx-api-golang-mock-pc
+# ntnx-api-golang-nexus-pc
 
-API definitions and code generation for ntnx-api-golang-mock service with **REAL gRPC support**.
+API definitions and code generation for ntnx-api-golang-nexus service with **REAL gRPC support**.
 
 ## 📋 Overview
 
@@ -14,19 +14,19 @@ This repository contains:
 ## 🏗️ Structure
 
 ```
-ntnx-api-golang-mock-pc/
+ntnx-api-golang-nexus-pc/
 ├── pom.xml                              # Maven parent
 ├── settings.xml                         # Maven settings
-├── golang-mock-api-definitions/         # YAML API definitions
+├── golang-nexus-api-definitions/         # YAML API definitions
 │   └── defs/
-│       └── namespaces/mock/v4/modules/config/released/
-│           ├── models/catModel.yaml     # Cat schema
-│           └── api/catEndpoint.yaml     # Cat endpoints
-├── golang-mock-api-codegen/             # Code generators
-│   ├── golang-mock-go-dto-definitions/  # DTO generator
+│       └── namespaces/nexus/v4/modules/config/released/
+│           ├── models/itemModel.yaml     # Item schema
+│           └── api/itemEndpoint.yaml     # Item endpoints
+├── golang-nexus-api-codegen/             # Code generators
+│   ├── golang-nexus-go-dto-definitions/  # DTO generator
 │   └── pom.xml
 └── generated-code/                      # Generated output
-    └── dto/src/models/mock/v4/config/
+    └── dto/src/models/nexus/v4/config/
         └── config_model.go              # Auto-generated DTOs
 ```
 
@@ -45,8 +45,8 @@ mvn clean install -s settings.xml
 ```
 
 This generates:
-- `generated-code/dto/src/models/mock/v4/config/config_model.go`
-- Auto-generated constructors (NewCat(), NewLocation(), etc.)
+- `generated-code/dto/src/models/nexus/v4/config/config_model.go`
+- Auto-generated constructors (NewItem(), NewLoitemion(), etc.)
 - Auto-set $objectType and $reserved fields
 
 ### Generate gRPC Code (.pb.go files)
@@ -60,28 +60,28 @@ export PATH=$PATH:$(go env GOPATH)/bin
 ```
 
 This generates **real gRPC files** (like guru):
-- `generated-code/protobuf/mock/v4/config/config.pb.go` (11KB)
-- `generated-code/protobuf/mock/v4/config/cat_service.pb.go` (35KB)
-- `generated-code/protobuf/mock/v4/config/cat_service_grpc.pb.go` (19KB) ✨
+- `generated-code/protobuf/nexus/v4/config/config.pb.go` (11KB)
+- `generated-code/protobuf/nexus/v4/config/item_service.pb.go` (35KB)
+- `generated-code/protobuf/nexus/v4/config/item_service_grpc.pb.go` (19KB) ✨
 
 ## 📦 Usage
 
-The service repository (`ntnx-api-golang-mock`) imports generated DTOs:
+The service repository (`ntnx-api-golang-nexus`) imports generated DTOs:
 
 ```go
-// In ntnx-api-golang-mock/go.mod
+// In ntnx-api-golang-nexus/go.mod
 require (
-    github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/dto v0.0.0
+    github.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/dto v0.0.0
 )
-replace github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/dto => 
-    ../ntnx-api-golang-mock-pc/generated-code/dto/src
+replace github.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/dto => 
+    ../ntnx-api-golang-nexus-pc/generated-code/dto/src
 ```
 
 ## 📝 Adding New APIs
 
 1. Edit YAML:
-   - Model: `defs/namespaces/mock/v4/modules/config/released/models/myModel.yaml`
-   - API: `defs/namespaces/mock/v4/modules/config/released/api/myEndpoint.yaml`
+   - Model: `defs/namespaces/nexus/v4/modules/config/released/models/myModel.yaml`
+   - API: `defs/namespaces/nexus/v4/modules/config/released/api/myEndpoint.yaml`
 
 2. Generate code:
    ```bash
@@ -97,7 +97,7 @@ replace github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/dto =>
 
 ## 🔗 Related
 
-- **Service Implementation:** [ntnx-api-golang-mock](https://github.com/nitinmangotra1212/ntnx-api-golang-mock)
+- **Service Implementation:** [ntnx-api-golang-nexus](https://github.com/nitinmangotra1212/ntnx-api-golang-nexus)
 
 ## 📞 Contact
 

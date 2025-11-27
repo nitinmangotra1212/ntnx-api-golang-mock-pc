@@ -7,8 +7,8 @@
 set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PROTO_DIR="${SCRIPT_DIR}/generated-code/protobuf/swagger/mock/v4/config"
-OUT_DIR="${SCRIPT_DIR}/generated-code/protobuf/mock/v4/config"
+PROTO_DIR="${SCRIPT_DIR}/generated-code/protobuf/swagger/nexus/v4/config"
+OUT_DIR="${SCRIPT_DIR}/generated-code/protobuf/nexus/v4/config"
 
 echo "🔧 Generating gRPC protobuf code..."
 echo "================================================"
@@ -49,7 +49,7 @@ echo ""
 echo "🔄 Generating .pb.go files from protobuf definitions..."
 echo ""
 
-# Set proto paths - need to include swagger root for imports like mock/v4/error/error.proto
+# Set proto paths - need to include swagger root for imports like nexus/v4/error/error.proto
 SWAGGER_PROTO_ROOT="${SCRIPT_DIR}/generated-code/protobuf/swagger"
 PROTO_OUT_ROOT="${SCRIPT_DIR}/generated-code/protobuf"
 
@@ -62,7 +62,7 @@ protoc --proto_path="${SWAGGER_PROTO_ROOT}" \
     --proto_path="$(go env GOROOT)/src" \
     --go_out="${PROTO_OUT_ROOT}" \
     --go_opt=paths=source_relative \
-    mock/v4/error/error.proto
+    nexus/v4/error/error.proto
 
 # Generate for config.proto
 echo "  → config.proto"
@@ -70,56 +70,121 @@ protoc --proto_path="${SWAGGER_PROTO_ROOT}" \
     --proto_path="$(go env GOROOT)/src" \
     --go_out="${PROTO_OUT_ROOT}" \
     --go_opt=paths=source_relative \
-    mock/v4/config/config.proto
+    nexus/v4/config/config.proto
 
-# Generate for cat_service.proto (includes gRPC service definitions)
-echo "  → cat_service.proto"
+# Generate for item_service.proto (includes gRPC service definitions)
+echo "  → item_service.proto"
 protoc --proto_path="${SWAGGER_PROTO_ROOT}" \
     --proto_path="$(go env GOROOT)/src" \
     --go_out="${PROTO_OUT_ROOT}" \
     --go_opt=paths=source_relative \
     --go-grpc_out="${PROTO_OUT_ROOT}" \
     --go-grpc_opt=paths=source_relative \
-    mock/v4/config/cat_service.proto
+    nexus/v4/config/item_service.proto
 
 # Post-process: Fix import paths in generated .pb.go files
+# IMPORTANT: Only fix Go import statements, NOT the raw descriptor (binary data)
 echo ""
 echo "🔧 Fixing import paths in generated .pb.go files..."
 PROTO_OUT_DIR="${SCRIPT_DIR}/generated-code/protobuf"
 for file in $(find "${PROTO_OUT_DIR}" -name "*.pb.go" -type f); do
     if [[ -f "$file" ]]; then
-        # Fix import paths: mock/v4/... -> github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/protobuf/mock/v4/...
-        sed -i '' 's|"mock/v4/|"github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/protobuf/mock/v4/|g' "$file"
-        # Remove blank imports to non-existent packages (like mock/v4 for api_version.proto which doesn't generate Go code)
-        # Match both the full path and the relative path versions
-        sed -i '' '/^[[:space:]]*_[[:space:]]*"github\.com\/nutanix\/ntnx-api-golang-mock-pc\/generated-code\/protobuf\/mock\/v4"$/d' "$file"
-        sed -i '' '/^[[:space:]]*_[[:space:]]*"mock\/v4"$/d' "$file"
+        # Fix import statements (lines starting with "import" or in import block)
+        # But NOT the raw descriptor constant (which contains binary data)
+        # Use a more targeted approach: only fix actual import statements
+        python3 << PYEOF
+import re
+with open("$file", "r") as f:
+    content = f.read()
+
+# Only replace in import statements, not in raw descriptor constants
+# Match import statements (single line or block)
+lines = content.split('\n')
+in_import_block = False
+result_lines = []
+skip_next_rawdesc = False
+
+for i, line in enumerate(lines):
+    # Skip raw descriptor constants - they contain binary data and should not be modified
+    if 'const file_' in line and '_rawDesc =' in line:
+        skip_next_rawdesc = True
+        result_lines.append(line)
+        continue
+    
+    if skip_next_rawdesc:
+        # Skip until we find the closing of the rawDesc constant
+        result_lines.append(line)
+        if line.strip().endswith('"') and not line.strip().endswith('\\"'):
+            # Check if this looks like end of rawDesc (next line is usually "var" or "func")
+            if i + 1 < len(lines) and ('var ' in lines[i+1] or 'func ' in lines[i+1]):
+                skip_next_rawdesc = False
+        continue
+    
+    # Fix import statements only
+    if line.strip().startswith('import ') or (in_import_block and (line.strip().startswith('"') or line.strip() == ')')):
+        # This is an import statement
+        line = re.sub(r'"nexus/v4/', r'"github.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/protobuf/nexus/v4/', line)
+        if line.strip() == 'import (':
+            in_import_block = True
+        elif line.strip() == ')':
+            in_import_block = False
+    elif 'import (' in line:
+        in_import_block = True
+    
+    result_lines.append(line)
+
+content = '\n'.join(result_lines)
+
+# Remove blank imports
+content = re.sub(r'^[ \t]*_[ \t]*"github\.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/protobuf/nexus/v4"$', '', content, flags=re.MULTILINE)
+content = re.sub(r'^[ \t]*_[ \t]*"nexus/v4"$', '', content, flags=re.MULTILINE)
+
+with open("$file", "w") as f:
+    f.write(content)
+PYEOF
     fi
 done
-echo "  ✅ Fixed import paths in all .pb.go files"
+
+# Fix common/v1 and nexus/v4/error imports (these are in import statements, safe to fix)
+echo "  🔧 Fixing common/v1 and nexus/v4/error import paths..."
+for file in $(find "${PROTO_OUT_DIR}" -name "*.pb.go" -type f); do
+    if [[ -f "$file" ]]; then
+        sed -i '' 's|response "common/v1/response"|response "github.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/protobuf/common/v1/response"|g' "$file"
+        sed -i '' 's|config "common/v1/config"|config "github.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/protobuf/common/v1/config"|g' "$file"
+        sed -i '' 's|"nexus/v4/error"|"github.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/protobuf/nexus/v4/error"|g' "$file"
+    fi
+done
+
+echo "  ✅ Fixed import paths in all .pb.go files (preserved raw descriptors)"
 
 # Post-process: Fix FullMethodName to use lowercase method names from proto
 # protoc-gen-go-grpc converts method names to PascalCase, but FullMethodName should preserve proto case
 echo ""
 echo "🔧 Fixing FullMethodName constants to match proto method names (lowercase)..."
-GRPC_FILE="${OUT_DIR}/cat_service_grpc.pb.go"
+GRPC_FILE="${OUT_DIR}/item_service_grpc.pb.go"
 if [ -f "${GRPC_FILE}" ]; then
-    # Fix all method names to use lowercase (camelCase) to match proto definitions
-    # Fix FullMethodName constants
-    sed -i '' 's|/mock.v4.config.CatService/ListCats|/mock.v4.config.CatService/listCats|g' "${GRPC_FILE}"
-    sed -i '' 's|/mock.v4.config.CatService/GetCat|/mock.v4.config.CatService/getCat|g' "${GRPC_FILE}"
-    sed -i '' 's|/mock.v4.config.CatService/CreateCat|/mock.v4.config.CatService/createCat|g' "${GRPC_FILE}"
-    sed -i '' 's|/mock.v4.config.CatService/UpdateCat|/mock.v4.config.CatService/updateCat|g' "${GRPC_FILE}"
-    sed -i '' 's|/mock.v4.config.CatService/DeleteCat|/mock.v4.config.CatService/deleteCat|g' "${GRPC_FILE}"
-    sed -i '' 's|/mock.v4.config.CatService/GetCatAsync|/mock.v4.config.CatService/getCatAsync|g' "${GRPC_FILE}"
-    # Fix MethodName in ServiceDesc (gRPC uses this for method matching)
-    sed -i '' 's|MethodName: "ListCats"|MethodName: "listCats"|g' "${GRPC_FILE}"
-    sed -i '' 's|MethodName: "GetCat"|MethodName: "getCat"|g' "${GRPC_FILE}"
-    sed -i '' 's|MethodName: "CreateCat"|MethodName: "createCat"|g' "${GRPC_FILE}"
-    sed -i '' 's|MethodName: "UpdateCat"|MethodName: "updateCat"|g' "${GRPC_FILE}"
-    sed -i '' 's|MethodName: "DeleteCat"|MethodName: "deleteCat"|g' "${GRPC_FILE}"
-    sed -i '' 's|MethodName: "GetCatAsync"|MethodName: "getCatAsync"|g' "${GRPC_FILE}"
-    echo "  ✅ Fixed all CatService FullMethodName constants and MethodName fields (listCats, getCat, createCat, updateCat, deleteCat, getCatAsync)"
+    # Note: Proto file already has lowercase method names (listItems, getItem, etc.)
+    # protoc-gen-go-grpc preserves the proto case, so no changes needed
+    # Just verify method names are lowercase
+    if grep -q 'MethodName: "ListItems"' "${GRPC_FILE}"; then
+        # If protoc generated PascalCase, convert to lowercase
+        sed -i '' 's|MethodName: "ListItems"|MethodName: "listItems"|g' "${GRPC_FILE}"
+        sed -i '' 's|MethodName: "GetItem"|MethodName: "getItem"|g' "${GRPC_FILE}"
+        sed -i '' 's|MethodName: "CreateItem"|MethodName: "createItem"|g' "${GRPC_FILE}"
+        sed -i '' 's|MethodName: "UpdateItem"|MethodName: "updateItem"|g' "${GRPC_FILE}"
+        sed -i '' 's|MethodName: "DeleteItem"|MethodName: "deleteItem"|g' "${GRPC_FILE}"
+        sed -i '' 's|MethodName: "GetItemAsync"|MethodName: "getItemAsync"|g' "${GRPC_FILE}"
+        # Fix FullMethodName constants if needed
+        sed -i '' 's|/nexus.v4.config.ItemService/ListItems|/nexus.v4.config.ItemService/listItems|g' "${GRPC_FILE}"
+        sed -i '' 's|/nexus.v4.config.ItemService/GetItem|/nexus.v4.config.ItemService/getItem|g' "${GRPC_FILE}"
+        sed -i '' 's|/nexus.v4.config.ItemService/CreateItem|/nexus.v4.config.ItemService/createItem|g' "${GRPC_FILE}"
+        sed -i '' 's|/nexus.v4.config.ItemService/UpdateItem|/nexus.v4.config.ItemService/updateItem|g' "${GRPC_FILE}"
+        sed -i '' 's|/nexus.v4.config.ItemService/DeleteItem|/nexus.v4.config.ItemService/deleteItem|g' "${GRPC_FILE}"
+        sed -i '' 's|/nexus.v4.config.ItemService/GetItemAsync|/nexus.v4.config.ItemService/getItemAsync|g' "${GRPC_FILE}"
+        echo "  ✅ Fixed ItemService method names to lowercase (listItems, getItem, createItem, updateItem, deleteItem, getItemAsync)"
+    else
+        echo "  ✅ Method names already lowercase (no changes needed)"
+    fi
 fi
 
 echo ""
@@ -131,8 +196,8 @@ ls -lh "${OUT_DIR}"/*.pb.go 2>/dev/null || echo "  (checking...)"
 echo ""
 echo "📦 Generated files:"
 echo "  - config.pb.go          (protobuf messages)"
-echo "  - cat_service.pb.go     (service messages)"
-echo "  - cat_service_grpc.pb.go (gRPC service stubs)"
+echo "  - item_service.pb.go     (service messages)"
+echo "  - item_service_grpc.pb.go (gRPC service stubs)"
 echo ""
 echo "🎉 Ready to implement gRPC servers!"
 

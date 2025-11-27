@@ -1,0 +1,95 @@
+components:
+  schemas:
+    Item:
+      description: Item entity for mock REST API
+      type: object
+      required:
+        - itemName
+        - itemType
+      properties:
+        itemId:
+          description: Unique identifier for the item
+          type: integer
+          format: int32
+          readOnly: true
+        itemName:
+          description: Name of the item
+          type: string
+          example: "Whiskers"
+          x-constraints:
+            minLength: 1
+            maxLength: 100
+        itemType:
+          description: Type of item
+          type: string
+          example: "Persian"
+          x-constraints:
+            minLength: 1
+            maxLength: 50
+        description:
+          description: Description of the item
+          type: string
+          example: "A fluffy Persian item"
+        itemImageFile:
+          description: Path to item image file
+          type: string
+        location:
+          description: Location information for the item
+          $ref: "ModelRef({./Location})"
+      x-codegen-hint:
+        $any:
+          - type: entity-identifier
+            properties:
+              identifiers:
+                - name: itemId
+                  index: 2001
+                - name: itemName
+                  index: 2002
+                - name: itemType
+                  index: 2003
+                - name: description
+                  index: 2004
+                - name: itemImageFile
+                  index: 2005
+                - name: location
+                  index: 2006
+    
+    Location:
+      description: Geographical location information
+      type: object
+      properties:
+        country:
+          description: Country information
+          $ref: "ModelRef({./Country})"
+        city:
+          description: City name
+          type: string
+        zip:
+          description: ZIP or postal code
+          type: string
+      x-codegen-hint:
+        $any:
+          - type: entity-identifier
+            properties:
+              identifiers:
+                - name: country
+                  index: 2001
+                - name: city
+                  index: 2002
+                - name: zip
+                  index: 2003
+    
+    Country:
+      description: Country information
+      type: object
+      properties:
+        state:
+          description: State or province name
+          type: string
+      x-codegen-hint:
+        $any:
+          - type: entity-identifier
+            properties:
+              identifiers:
+                - name: state
+                  index: 2001

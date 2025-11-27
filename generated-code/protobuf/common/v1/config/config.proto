@@ -29,7 +29,7 @@ message IPAddressOrFQDNArrayWrapper {
   repeated common.v1.config.IPAddressOrFQDN value = 1000;
 }
 /*
- * An authentication scheme that requires the client to present a username and password. The server will service the request only if it can validate the user-ID and password for the protection space of the Request-URI. 
+ * An authentiitemion scheme that requires the client to present a username and password. The server will service the request only if it can validate the user-ID and password for the protection space of the Request-URI. 
  */
 message BasicAuth {
   /*
@@ -42,7 +42,7 @@ message BasicAuth {
   optional string password = 2002;
 }
 /*
- * A fully qualified domain name that specifies its exact location in the tree hierarchy of the Domain Name System. 
+ * A fully qualified domain name that specifies its exact loitemion in the tree hierarchy of the Domain Name System. 
  */
 message FQDN {
   /*

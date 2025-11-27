@@ -129,7 +129,7 @@ var file_mock_v4_http_method_options_proto_extTypes = []protoimpl.ExtensionInfo{
 		Field:         1000,
 		Name:          "mock.v4.ntnx_api_http",
 		Tag:           "bytes,1000,opt,name=ntnx_api_http",
-		Filename:      "github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/protobuf/mock/v4/http_method_options.proto",
+		Filename:      "mock/v4/http_method_options.proto",
 	},
 }
 

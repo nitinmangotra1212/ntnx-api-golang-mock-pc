@@ -17,7 +17,7 @@
 package response
 
 import (
-	config "github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/protobuf/common/v1/config"
+	config "github.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/protobuf/common/v1/config"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -68,7 +68,7 @@ func (x *ApiLink) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ApiLink.ProtoReflect.Descriptor instead.
+// Depreitemed: Use ApiLink.ProtoReflect.Descriptor instead.
 func (*ApiLink) Descriptor() ([]byte, []int) {
 	return file_common_v1_response_response_proto_rawDescGZIP(), []int{0}
 }
@@ -121,7 +121,7 @@ func (x *ApiLinkArrayWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ApiLinkArrayWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use ApiLinkArrayWrapper.ProtoReflect.Descriptor instead.
 func (*ApiLinkArrayWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_response_response_proto_rawDescGZIP(), []int{1}
 }
@@ -136,7 +136,7 @@ func (x *ApiLinkArrayWrapper) GetValue() []*ApiLink {
 // The metadata associated with an API response. This value is always present and minimally contains the self-link for the API request that produced this response. It also contains pagination data for the paginated requests.
 type ApiResponseMetadata struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// An array of flags that may indicate the status of the response. For example, a flag with the name 'isPaginated' and value 'false', indicates that the response is not paginated.
+	// An array of flags that may indiiteme the status of the response. For example, a flag with the name 'isPaginated' and value 'false', indiitemes that the response is not paginated.
 	Flags *config.FlagArrayWrapper `protobuf:"bytes,1001,opt,name=flags" json:"flags,omitempty"`
 	// An array of HATEOAS style links for the response that may also include pagination links for list operations.
 	Links *ApiLinkArrayWrapper `protobuf:"bytes,1002,opt,name=links" json:"links,omitempty"`
@@ -175,7 +175,7 @@ func (x *ApiResponseMetadata) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ApiResponseMetadata.ProtoReflect.Descriptor instead.
+// Depreitemed: Use ApiResponseMetadata.ProtoReflect.Descriptor instead.
 func (*ApiResponseMetadata) Descriptor() ([]byte, []int) {
 	return file_common_v1_response_response_proto_rawDescGZIP(), []int{2}
 }
@@ -251,7 +251,7 @@ func (x *ExternalizableAbstractModel) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ExternalizableAbstractModel.ProtoReflect.Descriptor instead.
+// Depreitemed: Use ExternalizableAbstractModel.ProtoReflect.Descriptor instead.
 func (*ExternalizableAbstractModel) Descriptor() ([]byte, []int) {
 	return file_common_v1_response_response_proto_rawDescGZIP(), []int{3}
 }

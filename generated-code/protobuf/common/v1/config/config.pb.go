@@ -82,7 +82,7 @@ func (x MessageSeverityMessage_MessageSeverity) Number() protoreflect.EnumNumber
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Do not use.
+// Depreitemed: Do not use.
 func (x *MessageSeverityMessage_MessageSeverity) UnmarshalJSON(b []byte) error {
 	num, err := protoimpl.X.UnmarshalJSONEnum(x.Descriptor(), b)
 	if err != nil {
@@ -92,7 +92,7 @@ func (x *MessageSeverityMessage_MessageSeverity) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Deprecated: Use MessageSeverityMessage_MessageSeverity.Descriptor instead.
+// Depreitemed: Use MessageSeverityMessage_MessageSeverity.Descriptor instead.
 func (MessageSeverityMessage_MessageSeverity) EnumDescriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{19, 0}
 }
@@ -131,7 +131,7 @@ func (x *IPAddressOrFQDNArrayWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use IPAddressOrFQDNArrayWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use IPAddressOrFQDNArrayWrapper.ProtoReflect.Descriptor instead.
 func (*IPAddressOrFQDNArrayWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{0}
 }
@@ -143,7 +143,7 @@ func (x *IPAddressOrFQDNArrayWrapper) GetValue() []*IPAddressOrFQDN {
 	return nil
 }
 
-// An authentication scheme that requires the client to present a username and password. The server will service the request only if it can validate the user-ID and password for the protection space of the Request-URI.
+// An authentiitemion scheme that requires the client to present a username and password. The server will service the request only if it can validate the user-ID and password for the protection space of the Request-URI.
 type BasicAuth struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Username required for the basic auth scheme. As per [RFC 2617](https://datatracker.ietf.org/doc/html/rfc2617) usernames might be case sensitive.
@@ -179,7 +179,7 @@ func (x *BasicAuth) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use BasicAuth.ProtoReflect.Descriptor instead.
+// Depreitemed: Use BasicAuth.ProtoReflect.Descriptor instead.
 func (*BasicAuth) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{1}
 }
@@ -198,7 +198,7 @@ func (x *BasicAuth) GetPassword() string {
 	return ""
 }
 
-// A fully qualified domain name that specifies its exact location in the tree hierarchy of the Domain Name System.
+// A fully qualified domain name that specifies its exact loitemion in the tree hierarchy of the Domain Name System.
 type FQDN struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The fully qualified domain name of the host.
@@ -232,7 +232,7 @@ func (x *FQDN) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use FQDN.ProtoReflect.Descriptor instead.
+// Depreitemed: Use FQDN.ProtoReflect.Descriptor instead.
 func (*FQDN) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{2}
 }
@@ -285,7 +285,7 @@ func (x *Flag) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Flag.ProtoReflect.Descriptor instead.
+// Depreitemed: Use Flag.ProtoReflect.Descriptor instead.
 func (*Flag) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{3}
 }
@@ -338,7 +338,7 @@ func (x *IPAddress) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use IPAddress.ProtoReflect.Descriptor instead.
+// Depreitemed: Use IPAddress.ProtoReflect.Descriptor instead.
 func (*IPAddress) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{4}
 }
@@ -392,7 +392,7 @@ func (x *IPAddressOrFQDN) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use IPAddressOrFQDN.ProtoReflect.Descriptor instead.
+// Depreitemed: Use IPAddressOrFQDN.ProtoReflect.Descriptor instead.
 func (*IPAddressOrFQDN) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{5}
 }
@@ -459,7 +459,7 @@ func (x *IPv4Address) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use IPv4Address.ProtoReflect.Descriptor instead.
+// Depreitemed: Use IPv4Address.ProtoReflect.Descriptor instead.
 func (*IPv4Address) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{6}
 }
@@ -519,7 +519,7 @@ func (x *IPv6Address) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use IPv6Address.ProtoReflect.Descriptor instead.
+// Depreitemed: Use IPv6Address.ProtoReflect.Descriptor instead.
 func (*IPv6Address) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{7}
 }
@@ -572,7 +572,7 @@ func (x *IpRange) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use IpRange.ProtoReflect.Descriptor instead.
+// Depreitemed: Use IpRange.ProtoReflect.Descriptor instead.
 func (*IpRange) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{8}
 }
@@ -625,7 +625,7 @@ func (x *StringWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use StringWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use StringWrapper.ProtoReflect.Descriptor instead.
 func (*StringWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{9}
 }
@@ -671,7 +671,7 @@ func (x *IntegerWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use IntegerWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use IntegerWrapper.ProtoReflect.Descriptor instead.
 func (*IntegerWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{10}
 }
@@ -717,7 +717,7 @@ func (x *BooleanWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use BooleanWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use BooleanWrapper.ProtoReflect.Descriptor instead.
 func (*BooleanWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{11}
 }
@@ -763,7 +763,7 @@ func (x *StringArrayWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use StringArrayWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use StringArrayWrapper.ProtoReflect.Descriptor instead.
 func (*StringArrayWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{12}
 }
@@ -809,7 +809,7 @@ func (x *StringMapWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use StringMapWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use StringMapWrapper.ProtoReflect.Descriptor instead.
 func (*StringMapWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{13}
 }
@@ -855,7 +855,7 @@ func (x *MapOfStringWrapperArrayWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use MapOfStringWrapperArrayWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use MapOfStringWrapperArrayWrapper.ProtoReflect.Descriptor instead.
 func (*MapOfStringWrapperArrayWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{14}
 }
@@ -901,7 +901,7 @@ func (x *IntegerArrayWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use IntegerArrayWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use IntegerArrayWrapper.ProtoReflect.Descriptor instead.
 func (*IntegerArrayWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{15}
 }
@@ -959,7 +959,7 @@ func (x *KVPair) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use KVPair.ProtoReflect.Descriptor instead.
+// Depreitemed: Use KVPair.ProtoReflect.Descriptor instead.
 func (*KVPair) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{16}
 }
@@ -1128,7 +1128,7 @@ func (x *MapOfStringWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use MapOfStringWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use MapOfStringWrapper.ProtoReflect.Descriptor instead.
 func (*MapOfStringWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{17}
 }
@@ -1183,7 +1183,7 @@ func (x *Message) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Message.ProtoReflect.Descriptor instead.
+// Depreitemed: Use Message.ProtoReflect.Descriptor instead.
 func (*Message) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{18}
 }
@@ -1248,7 +1248,7 @@ func (x *MessageSeverityMessage) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use MessageSeverityMessage.ProtoReflect.Descriptor instead.
+// Depreitemed: Use MessageSeverityMessage.ProtoReflect.Descriptor instead.
 func (*MessageSeverityMessage) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{19}
 }
@@ -1287,7 +1287,7 @@ func (x *ObjectMapWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ObjectMapWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use ObjectMapWrapper.ProtoReflect.Descriptor instead.
 func (*ObjectMapWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{20}
 }
@@ -1334,7 +1334,7 @@ func (x *TenantAwareModel) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use TenantAwareModel.ProtoReflect.Descriptor instead.
+// Depreitemed: Use TenantAwareModel.ProtoReflect.Descriptor instead.
 func (*TenantAwareModel) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{21}
 }
@@ -1387,7 +1387,7 @@ func (x *FlagArrayWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use FlagArrayWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use FlagArrayWrapper.ProtoReflect.Descriptor instead.
 func (*FlagArrayWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{22}
 }
@@ -1433,7 +1433,7 @@ func (x *MessageArrayWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use MessageArrayWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use MessageArrayWrapper.ProtoReflect.Descriptor instead.
 func (*MessageArrayWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{23}
 }
@@ -1479,7 +1479,7 @@ func (x *KVPairArrayWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use KVPairArrayWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use KVPairArrayWrapper.ProtoReflect.Descriptor instead.
 func (*KVPairArrayWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{24}
 }
@@ -1525,7 +1525,7 @@ func (x *IpRangeArrayWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use IpRangeArrayWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use IpRangeArrayWrapper.ProtoReflect.Descriptor instead.
 func (*IpRangeArrayWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{25}
 }
@@ -1571,7 +1571,7 @@ func (x *IPAddressArrayWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use IPAddressArrayWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use IPAddressArrayWrapper.ProtoReflect.Descriptor instead.
 func (*IPAddressArrayWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{26}
 }
@@ -1617,7 +1617,7 @@ func (x *BasicAuthArrayWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use BasicAuthArrayWrapper.ProtoReflect.Descriptor instead.
+// Depreitemed: Use BasicAuthArrayWrapper.ProtoReflect.Descriptor instead.
 func (*BasicAuthArrayWrapper) Descriptor() ([]byte, []int) {
 	return file_common_v1_config_config_proto_rawDescGZIP(), []int{27}
 }

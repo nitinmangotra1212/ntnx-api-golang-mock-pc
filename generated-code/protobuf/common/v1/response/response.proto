@@ -46,7 +46,7 @@ message ApiLinkArrayWrapper {
  */
 message ApiResponseMetadata {
   /*
-   * An array of flags that may indicate the status of the response. For example, a flag with the name 'isPaginated' and value 'false', indicates that the response is not paginated. 
+   * An array of flags that may indiiteme the status of the response. For example, a flag with the name 'isPaginated' and value 'false', indiitemes that the response is not paginated. 
    */
   optional common.v1.config.FlagArrayWrapper flags = 1001;
   /*

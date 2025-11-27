@@ -3,27 +3,27 @@
  *
  * Product version: 1.0.0-SNAPSHOT
  *
- * Part of the GoLang Mock API - REST API for Mock Cat Service
+ * Part of the GoLang Mock API - REST API for Mock Item Service
  *
  * (c) 2025 Nutanix Inc.  All rights reserved
  *
  */
 
 /*
-  Module mock.v4.config of GoLang Mock API - REST API for Mock Cat Service
+  Module mock.v4.config of GoLang Mock API - REST API for Mock Item Service
 */
 package config
 import (
-  import2 "github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/dto/models/common/v1/response"
+  import2 "github.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/dto/models/common/v1/response"
   "encoding/json"
   "errors"
   "fmt"
-  import1 "github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/dto/models/mock/v4/error"
+  import1 "github.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/dto/models/mock/v4/error"
 )
 /*
-Cat entity for mock REST API
+Item entity for mock REST API
 */
-type Cat struct {
+type Item struct {
   
   ObjectType_ *string `json:"$objectType,omitempty"`
   
@@ -31,41 +31,41 @@ type Cat struct {
   
   UnknownFields_ map[string]interface{} `json:"$unknownFields,omitempty"`
   /*
-  Unique identifier for the cat
+  Unique identifier for the item
   */
-  CatId *int `json:"catId,omitempty"`
+  ItemId *int `json:"itemId,omitempty"`
   /*
-  Path to cat image file
+  Path to item image file
   */
-  CatImageFile *string `json:"catImageFile,omitempty"`
+  ItemImageFile *string `json:"itemImageFile,omitempty"`
   /*
-  Name of the cat
+  Name of the item
   */
-  CatName *string `json:"catName"`
+  ItemName *string `json:"itemName"`
   /*
-  Type of cat
+  Type of item
   */
-  CatType *string `json:"catType"`
+  ItemType *string `json:"itemType"`
   /*
-  Description of the cat
+  Description of the item
   */
   Description *string `json:"description,omitempty"`
   
-  Location *Location `json:"location,omitempty"`
+  Loitemion *Loitemion `json:"loitemion,omitempty"`
 }
 
-func (p *Cat) MarshalJSON() ([]byte, error) {
-  type CatProxy Cat
+func (p *Item) MarshalJSON() ([]byte, error) {
+  type ItemProxy Item
 
   // Step 1: Marshal known fields via proxy to enforce required fields
   baseStruct := struct {
-    *CatProxy
-    CatName *string `json:"catName,omitempty"`
-    CatType *string `json:"catType,omitempty"`
+    *ItemProxy
+    ItemName *string `json:"itemName,omitempty"`
+    ItemType *string `json:"itemType,omitempty"`
   }{
-    CatProxy : (*CatProxy)(p),
-    CatName : p.CatName,
-    CatType : p.CatType,
+    ItemProxy : (*ItemProxy)(p),
+    ItemName : p.ItemName,
+    ItemType : p.ItemType,
   }
 
   known, err := json.Marshal(baseStruct)
@@ -89,7 +89,7 @@ func (p *Cat) MarshalJSON() ([]byte, error) {
     return json.Marshal(knownMap)
 }
 
-func (p *Cat) UnmarshalJSON(b []byte) error {
+func (p *Item) UnmarshalJSON(b []byte) error {
     // Step 1: Unmarshal into a generic map to capture all fields
     var allFields map[string]interface{}
 	if err := json.Unmarshal(b, &allFields); err != nil {
@@ -97,14 +97,14 @@ func (p *Cat) UnmarshalJSON(b []byte) error {
 	}
 
     // Step 2: Unmarshal into a temporary struct with known fields
-	type Alias Cat
+	type Alias Item
 	known := &Alias{}
 	if err := json.Unmarshal(b, known); err != nil {
 		return err
 	}
 
     // Step 3: Assign known fields
-	*p = *NewCat()
+	*p = *NewItem()
 
     if known.ObjectType_ != nil {
         p.ObjectType_ = known.ObjectType_
@@ -115,35 +115,35 @@ func (p *Cat) UnmarshalJSON(b []byte) error {
     if known.UnknownFields_ != nil {
         p.UnknownFields_ = known.UnknownFields_
     }
-    if known.CatId != nil {
-        p.CatId = known.CatId
+    if known.ItemId != nil {
+        p.ItemId = known.ItemId
     }
-    if known.CatImageFile != nil {
-        p.CatImageFile = known.CatImageFile
+    if known.ItemImageFile != nil {
+        p.ItemImageFile = known.ItemImageFile
     }
-    if known.CatName != nil {
-        p.CatName = known.CatName
+    if known.ItemName != nil {
+        p.ItemName = known.ItemName
     }
-    if known.CatType != nil {
-        p.CatType = known.CatType
+    if known.ItemType != nil {
+        p.ItemType = known.ItemType
     }
     if known.Description != nil {
         p.Description = known.Description
     }
-    if known.Location != nil {
-        p.Location = known.Location
+    if known.Loitemion != nil {
+        p.Loitemion = known.Loitemion
     }
 
     // Step 4: Remove known JSON fields from allFields map
 	delete(allFields, "$objectType")
 	delete(allFields, "$reserved")
 	delete(allFields, "$unknownFields")
-	delete(allFields, "catId")
-	delete(allFields, "catImageFile")
-	delete(allFields, "catName")
-	delete(allFields, "catType")
+	delete(allFields, "itemId")
+	delete(allFields, "itemImageFile")
+	delete(allFields, "itemName")
+	delete(allFields, "itemType")
 	delete(allFields, "description")
-	delete(allFields, "location")
+	delete(allFields, "loitemion")
 
     // Step 5: Assign remaining fields to UnknownFields_
 	for key, value := range allFields {
@@ -153,10 +153,10 @@ func (p *Cat) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func NewCat() *Cat {
-  p := new(Cat)
+func NewItem() *Item {
+  p := new(Item)
   p.ObjectType_ = new(string)
-  *p.ObjectType_ = "mock.v4.config.Cat"
+  *p.ObjectType_ = "mock.v4.config.Item"
   p.Reserved_ = map[string]interface{}{"$fv": "v4.r1"}
   p.UnknownFields_ = map[string]interface{}{}
 
@@ -268,9 +268,9 @@ func NewCountry() *Country {
 
 
 /*
-REST response for all response codes in API path /mock/v4.1/config/cats Get operation
+REST response for all response codes in API path /mock/v4.1/config/items Get operation
 */
-type ListCatsApiResponse struct {
+type ListItemsApiResponse struct {
   
   ObjectType_ *string `json:"$objectType,omitempty"`
   
@@ -282,14 +282,14 @@ type ListCatsApiResponse struct {
   */
   DataItemDiscriminator_ *string `json:"$dataItemDiscriminator,omitempty"`
   
-  Data *OneOfListCatsApiResponseData `json:"data,omitempty"`
+  Data *OneOfListItemsApiResponseData `json:"data,omitempty"`
   
   Metadata *import2.ApiResponseMetadata `json:"metadata,omitempty"`
 }
 
-func (p *ListCatsApiResponse) MarshalJSON() ([]byte, error) {
+func (p *ListItemsApiResponse) MarshalJSON() ([]byte, error) {
   // Create Alias to avoid infinite recursion
-  type Alias ListCatsApiResponse
+  type Alias ListItemsApiResponse
 
   // Step 1: Marshal the known fields
   known, err := json.Marshal(Alias(*p))
@@ -313,7 +313,7 @@ func (p *ListCatsApiResponse) MarshalJSON() ([]byte, error) {
     return json.Marshal(knownMap)
 }
 
-func (p *ListCatsApiResponse) UnmarshalJSON(b []byte) error {
+func (p *ListItemsApiResponse) UnmarshalJSON(b []byte) error {
     // Step 1: Unmarshal into a generic map to capture all fields
     var allFields map[string]interface{}
 	if err := json.Unmarshal(b, &allFields); err != nil {
@@ -321,14 +321,14 @@ func (p *ListCatsApiResponse) UnmarshalJSON(b []byte) error {
 	}
 
     // Step 2: Unmarshal into a temporary struct with known fields
-	type Alias ListCatsApiResponse
+	type Alias ListItemsApiResponse
 	known := &Alias{}
 	if err := json.Unmarshal(b, known); err != nil {
 		return err
 	}
 
     // Step 3: Assign known fields
-	*p = *NewListCatsApiResponse()
+	*p = *NewListItemsApiResponse()
 
     if known.ObjectType_ != nil {
         p.ObjectType_ = known.ObjectType_
@@ -365,10 +365,10 @@ func (p *ListCatsApiResponse) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func NewListCatsApiResponse() *ListCatsApiResponse {
-  p := new(ListCatsApiResponse)
+func NewListItemsApiResponse() *ListItemsApiResponse {
+  p := new(ListItemsApiResponse)
   p.ObjectType_ = new(string)
-  *p.ObjectType_ = "mock.v4.config.ListCatsApiResponse"
+  *p.ObjectType_ = "mock.v4.config.ListItemsApiResponse"
   p.Reserved_ = map[string]interface{}{"$fv": "v4.r1"}
   p.UnknownFields_ = map[string]interface{}{}
 
@@ -377,16 +377,16 @@ func NewListCatsApiResponse() *ListCatsApiResponse {
   return p
 }
 
-func (p *ListCatsApiResponse) GetData() interface{} {
+func (p *ListItemsApiResponse) GetData() interface{} {
   if nil == p.Data {
     return nil
   }
   return p.Data.GetValue()
 }
 
-func (p *ListCatsApiResponse) SetData(v interface{}) error {
+func (p *ListItemsApiResponse) SetData(v interface{}) error {
   if nil == p.Data {
-    p.Data = NewOneOfListCatsApiResponseData()
+    p.Data = NewOneOfListItemsApiResponseData()
   }
   e := p.Data.SetValue(v)
   if nil == e {
@@ -400,9 +400,9 @@ func (p *ListCatsApiResponse) SetData(v interface{}) error {
 
 
 /*
-Geographical location information
+Geographical loitemion information
 */
-type Location struct {
+type Loitemion struct {
   
   ObjectType_ *string `json:"$objectType,omitempty"`
   
@@ -421,9 +421,9 @@ type Location struct {
   Zip *string `json:"zip,omitempty"`
 }
 
-func (p *Location) MarshalJSON() ([]byte, error) {
+func (p *Loitemion) MarshalJSON() ([]byte, error) {
   // Create Alias to avoid infinite recursion
-  type Alias Location
+  type Alias Loitemion
 
   // Step 1: Marshal the known fields
   known, err := json.Marshal(Alias(*p))
@@ -447,7 +447,7 @@ func (p *Location) MarshalJSON() ([]byte, error) {
     return json.Marshal(knownMap)
 }
 
-func (p *Location) UnmarshalJSON(b []byte) error {
+func (p *Loitemion) UnmarshalJSON(b []byte) error {
     // Step 1: Unmarshal into a generic map to capture all fields
     var allFields map[string]interface{}
 	if err := json.Unmarshal(b, &allFields); err != nil {
@@ -455,14 +455,14 @@ func (p *Location) UnmarshalJSON(b []byte) error {
 	}
 
     // Step 2: Unmarshal into a temporary struct with known fields
-	type Alias Location
+	type Alias Loitemion
 	known := &Alias{}
 	if err := json.Unmarshal(b, known); err != nil {
 		return err
 	}
 
     // Step 3: Assign known fields
-	*p = *NewLocation()
+	*p = *NewLoitemion()
 
     if known.ObjectType_ != nil {
         p.ObjectType_ = known.ObjectType_
@@ -499,10 +499,10 @@ func (p *Location) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-func NewLocation() *Location {
-  p := new(Location)
+func NewLoitemion() *Loitemion {
+  p := new(Loitemion)
   p.ObjectType_ = new(string)
-  *p.ObjectType_ = "mock.v4.config.Location"
+  *p.ObjectType_ = "mock.v4.config.Loitemion"
   p.Reserved_ = map[string]interface{}{"$fv": "v4.r1"}
   p.UnknownFields_ = map[string]interface{}{}
 
@@ -513,23 +513,23 @@ func NewLocation() *Location {
 
 
 
-type OneOfListCatsApiResponseData struct {
+type OneOfListItemsApiResponseData struct {
   Discriminator *string `json:"-"`
   ObjectType_ *string `json:"-"`
   oneOfType400 *import1.ErrorResponse `json:"-"`
-  oneOfType2001 []Cat `json:"-"`
+  oneOfType2001 []Item `json:"-"`
 }
 
-func NewOneOfListCatsApiResponseData() *OneOfListCatsApiResponseData {
-  p := new(OneOfListCatsApiResponseData)
+func NewOneOfListItemsApiResponseData() *OneOfListItemsApiResponseData {
+  p := new(OneOfListItemsApiResponseData)
   p.Discriminator = new(string)
   p.ObjectType_ = new(string)
   return p
 }
 
-func (p *OneOfListCatsApiResponseData) SetValue (v interface {}) error {
+func (p *OneOfListItemsApiResponseData) SetValue (v interface {}) error {
   if nil == p {
-    return errors.New(fmt.Sprintf("OneOfListCatsApiResponseData is nil"))
+    return errors.New(fmt.Sprintf("OneOfListItemsApiResponseData is nil"))
   }
   switch v.(type) {
     case import1.ErrorResponse:
@@ -539,29 +539,29 @@ func (p *OneOfListCatsApiResponseData) SetValue (v interface {}) error {
       *p.Discriminator = *p.oneOfType400.ObjectType_
       if nil == p.ObjectType_ {p.ObjectType_ = new(string)}
       *p.ObjectType_ = *p.oneOfType400.ObjectType_
-    case []Cat:
-      p.oneOfType2001 = v.([]Cat)
+    case []Item:
+      p.oneOfType2001 = v.([]Item)
       if nil == p.Discriminator {p.Discriminator = new(string)}
-      *p.Discriminator = "List<mock.v4.config.Cat>"
+      *p.Discriminator = "List<mock.v4.config.Item>"
       if nil == p.ObjectType_ {p.ObjectType_ = new(string)}
-      *p.ObjectType_ = "List<mock.v4.config.Cat>"
+      *p.ObjectType_ = "List<mock.v4.config.Item>"
     default:
       return errors.New(fmt.Sprintf("%T(%v) is not expected type", v,v))
   }
   return nil
 }
 
-func (p *OneOfListCatsApiResponseData) GetValue() interface{} {
+func (p *OneOfListItemsApiResponseData) GetValue() interface{} {
   if p.oneOfType400 != nil && *p.oneOfType400.ObjectType_ == *p.Discriminator {
     return *p.oneOfType400
   }
-  if "List<mock.v4.config.Cat>" == *p.Discriminator {
+  if "List<mock.v4.config.Item>" == *p.Discriminator {
     return p.oneOfType2001
   }
   return nil
 }
 
-func (p *OneOfListCatsApiResponseData) UnmarshalJSON(b []byte) error {
+func (p *OneOfListItemsApiResponseData) UnmarshalJSON(b []byte) error {
   vOneOfType400 := new(import1.ErrorResponse)
   if err := json.Unmarshal(b, vOneOfType400); err == nil {
     if "mock.v4.error.ErrorResponse" == *vOneOfType400.ObjectType_ {
@@ -574,28 +574,28 @@ func (p *OneOfListCatsApiResponseData) UnmarshalJSON(b []byte) error {
       return nil
     }
   }
-  vOneOfType2001 := new([]Cat)
+  vOneOfType2001 := new([]Item)
   if err := json.Unmarshal(b, vOneOfType2001); err == nil {
-    if len(*vOneOfType2001) == 0 || "mock.v4.config.Cat" == *((*vOneOfType2001)[0].ObjectType_) {
+    if len(*vOneOfType2001) == 0 || "mock.v4.config.Item" == *((*vOneOfType2001)[0].ObjectType_) {
       p.oneOfType2001 = *vOneOfType2001
       if nil == p.Discriminator {p.Discriminator = new(string)}
-      *p.Discriminator = "List<mock.v4.config.Cat>"
+      *p.Discriminator = "List<mock.v4.config.Item>"
       if nil == p.ObjectType_ {p.ObjectType_ = new(string)}
-      *p.ObjectType_ = "List<mock.v4.config.Cat>"
+      *p.ObjectType_ = "List<mock.v4.config.Item>"
       return nil
     }
   }
-  return errors.New(fmt.Sprintf("Unable to unmarshal for OneOfListCatsApiResponseData"))
+  return errors.New(fmt.Sprintf("Unable to unmarshal for OneOfListItemsApiResponseData"))
 }
 
-func (p *OneOfListCatsApiResponseData) MarshalJSON() ([]byte, error) {
+func (p *OneOfListItemsApiResponseData) MarshalJSON() ([]byte, error) {
   if p.oneOfType400 != nil && *p.oneOfType400.ObjectType_ == *p.Discriminator {
     return json.Marshal(p.oneOfType400)
   }
-  if "List<mock.v4.config.Cat>" == *p.Discriminator {
+  if "List<mock.v4.config.Item>" == *p.Discriminator {
     return json.Marshal(p.oneOfType2001)
   }
-  return nil, errors.New("No value to marshal for OneOfListCatsApiResponseData")
+  return nil, errors.New("No value to marshal for OneOfListItemsApiResponseData")
 }
 
 

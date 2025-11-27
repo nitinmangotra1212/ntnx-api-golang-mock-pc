@@ -3,7 +3,7 @@
  *
  * Product version: 1.0.0-SNAPSHOT
  *
- * Part of the GoLang Mock API - REST API for Mock Cat Service
+ * Part of the GoLang Mock API - REST API for Mock Item Service
  *
  * (c) 2025 Nutanix Inc.  All rights reserved
  *
@@ -14,7 +14,7 @@
 */
 package error
 import (
-  import1 "github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/dto/models/common/v1/config"
+  import1 "github.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/dto/models/common/v1/config"
   "encoding/json"
   "errors"
   "fmt"
@@ -161,7 +161,7 @@ func NewAppMessage() *AppMessage {
 
 
 /*
-An error response indicates that the operation has failed either due to a client error(4XX) or server error(5XX). Please look at the HTTP status code and namespace specific error code and error message for further details.
+An error response indiitemes that the operation has failed either due to a client error(4XX) or server error(5XX). Please look at the HTTP status code and namespace specific error code and error message for further details.
 */
 type ErrorResponse struct {
   
@@ -435,7 +435,7 @@ type SchemaValidationErrorMessage struct {
   /*
   The part of the request that failed validation. Validation can fail for path, query parameters, and request body.
   */
-  Location *string `json:"location,omitempty"`
+  Loitemion *string `json:"loitemion,omitempty"`
   /*
   The detailed message for the validation error.
   */
@@ -497,8 +497,8 @@ func (p *SchemaValidationErrorMessage) UnmarshalJSON(b []byte) error {
     if known.AttributePath != nil {
         p.AttributePath = known.AttributePath
     }
-    if known.Location != nil {
-        p.Location = known.Location
+    if known.Loitemion != nil {
+        p.Loitemion = known.Loitemion
     }
     if known.Message != nil {
         p.Message = known.Message
@@ -509,7 +509,7 @@ func (p *SchemaValidationErrorMessage) UnmarshalJSON(b []byte) error {
 	delete(allFields, "$reserved")
 	delete(allFields, "$unknownFields")
 	delete(allFields, "attributePath")
-	delete(allFields, "location")
+	delete(allFields, "loitemion")
 	delete(allFields, "message")
 
     // Step 5: Assign remaining fields to UnknownFields_

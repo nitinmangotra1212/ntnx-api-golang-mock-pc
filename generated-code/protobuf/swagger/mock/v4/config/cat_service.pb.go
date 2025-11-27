@@ -3,7 +3,7 @@
 //
 // Product version: 1.0.0-SNAPSHOT
 //
-// Part of the GoLang Mock API - REST API for Mock Cat Service
+// Part of the GoLang Mock API - REST API for Mock Item Service
 //
 // (c) 2025 Nutanix Inc.  All rights reserved
 //
@@ -12,13 +12,14 @@
 // versions:
 // 	protoc-gen-go v1.36.10
 // 	protoc        v6.33.0
-// source: mock/v4/config/cat_service.proto
+// source: mock/v4/config/Cat_service.proto
 
 package config
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	_ "mock/v4"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -31,28 +32,28 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// message containing all attributes expected in the listCats request
-type ListCatsArg struct {
+// message containing all attributes expected in the listItems request
+type ListItemsArg struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListCatsArg) Reset() {
-	*x = ListCatsArg{}
-	mi := &file_mock_v4_config_cat_service_proto_msgTypes[0]
+func (x *ListItemsArg) Reset() {
+	*x = ListItemsArg{}
+	mi := &file_mock_v4_config_Cat_service_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListCatsArg) String() string {
+func (x *ListItemsArg) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListCatsArg) ProtoMessage() {}
+func (*ListItemsArg) ProtoMessage() {}
 
-func (x *ListCatsArg) ProtoReflect() protoreflect.Message {
-	mi := &file_mock_v4_config_cat_service_proto_msgTypes[0]
+func (x *ListItemsArg) ProtoReflect() protoreflect.Message {
+	mi := &file_mock_v4_config_Cat_service_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -63,37 +64,37 @@ func (x *ListCatsArg) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListCatsArg.ProtoReflect.Descriptor instead.
-func (*ListCatsArg) Descriptor() ([]byte, []int) {
-	return file_mock_v4_config_cat_service_proto_rawDescGZIP(), []int{0}
+// Deprecated: Use ListItemsArg.ProtoReflect.Descriptor instead.
+func (*ListItemsArg) Descriptor() ([]byte, []int) {
+	return file_mock_v4_config_Cat_service_proto_rawDescGZIP(), []int{0}
 }
 
-// message containing all attributes expected in the listCats response
-type ListCatsRet struct {
+// message containing all attributes expected in the listItems response
+type ListItemsRet struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// field containing expected response content
-	Content *ListCatsApiResponse `protobuf:"bytes,999,opt,name=content" json:"content,omitempty"`
+	Content *ListItemsApiResponse `protobuf:"bytes,999,opt,name=content" json:"content,omitempty"`
 	// map containing headers expected in response
 	Reserved      map[string]string `protobuf:"bytes,1000,rep,name=reserved" json:"reserved,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListCatsRet) Reset() {
-	*x = ListCatsRet{}
-	mi := &file_mock_v4_config_cat_service_proto_msgTypes[1]
+func (x *ListItemsRet) Reset() {
+	*x = ListItemsRet{}
+	mi := &file_mock_v4_config_Cat_service_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListCatsRet) String() string {
+func (x *ListItemsRet) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListCatsRet) ProtoMessage() {}
+func (*ListItemsRet) ProtoMessage() {}
 
-func (x *ListCatsRet) ProtoReflect() protoreflect.Message {
-	mi := &file_mock_v4_config_cat_service_proto_msgTypes[1]
+func (x *ListItemsRet) ProtoReflect() protoreflect.Message {
+	mi := &file_mock_v4_config_Cat_service_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -104,67 +105,66 @@ func (x *ListCatsRet) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListCatsRet.ProtoReflect.Descriptor instead.
-func (*ListCatsRet) Descriptor() ([]byte, []int) {
-	return file_mock_v4_config_cat_service_proto_rawDescGZIP(), []int{1}
+// Deprecated: Use ListItemsRet.ProtoReflect.Descriptor instead.
+func (*ListItemsRet) Descriptor() ([]byte, []int) {
+	return file_mock_v4_config_Cat_service_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ListCatsRet) GetContent() *ListCatsApiResponse {
+func (x *ListItemsRet) GetContent() *ListItemsApiResponse {
 	if x != nil {
 		return x.Content
 	}
 	return nil
 }
 
-func (x *ListCatsRet) GetReserved() map[string]string {
+func (x *ListItemsRet) GetReserved() map[string]string {
 	if x != nil {
 		return x.Reserved
 	}
 	return nil
 }
 
-var File_mock_v4_config_cat_service_proto protoreflect.FileDescriptor
+var File_mock_v4_config_Cat_service_proto protoreflect.FileDescriptor
 
-const file_mock_v4_config_cat_service_proto_rawDesc = "" +
+const file_mock_v4_config_Cat_service_proto_rawDesc = "" +
 	"\n" +
-	" mock/v4/config/cat_service.proto\x12\x0emock.v4.config\x1a\x19mock/v4/api_version.proto\x1a!mock/v4/http_method_options.proto\x1a\x1bmock/v4/config/config.proto\"\r\n" +
-	"\vListCatsArg\"\xd2\x01\n" +
-	"\vListCatsRet\x12>\n" +
-	"\acontent\x18\xe7\a \x01(\v2#.mock.v4.config.ListCatsApiResponseR\acontent\x12F\n" +
-	"\breserved\x18\xe8\a \x03(\v2).mock.v4.config.ListCatsRet.ReservedEntryR\breserved\x1a;\n" +
+	" mock/v4/config/Cat_service.proto\x12\x0emock.v4.config\x1a\x19mock/v4/api_version.proto\x1a!mock/v4/http_method_options.proto\x1a\x1bmock/v4/config/config.proto\"\x0e\n" +
+	"\fListItemsArg\"\xd5\x01\n" +
+	"\fListItemsRet\x12?\n" +
+	"\acontent\x18\xe7\a \x01(\v2$.mock.v4.config.ListItemsApiResponseR\acontent\x12G\n" +
+	"\breserved\x18\xe8\a \x03(\v2*.mock.v4.config.ListItemsRet.ReservedEntryR\breserved\x1a;\n" +
 	"\rReservedEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x012x\n" +
-	"\n" +
-	"CatService\x12_\n" +
-	"\blistCats\x12\x1b.mock.v4.config.ListCatsArg\x1a\x1b.mock.v4.config.ListCatsRet\"\x19\xc2>\x16*\x14/mock/v4/config/cats\x1a\t\x82}\x06\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x012}\n" +
+	"\vItemService\x12c\n" +
+	"\tlistItems\x12\x1c.mock.v4.config.ListItemsArg\x1a\x1c.mock.v4.config.ListItemsRet\"\x1a\xc2>\x17*\x15/mock/v4/config/items\x1a\t\x82}\x06\n" +
 	"\x014\x12\x011B\"\n" +
 	"\x0emock.v4.configP\x01Z\x0emock/v4/config"
 
 var (
-	file_mock_v4_config_cat_service_proto_rawDescOnce sync.Once
-	file_mock_v4_config_cat_service_proto_rawDescData []byte
+	file_mock_v4_config_Cat_service_proto_rawDescOnce sync.Once
+	file_mock_v4_config_Cat_service_proto_rawDescData []byte
 )
 
-func file_mock_v4_config_cat_service_proto_rawDescGZIP() []byte {
-	file_mock_v4_config_cat_service_proto_rawDescOnce.Do(func() {
-		file_mock_v4_config_cat_service_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_mock_v4_config_cat_service_proto_rawDesc), len(file_mock_v4_config_cat_service_proto_rawDesc)))
+func file_mock_v4_config_Cat_service_proto_rawDescGZIP() []byte {
+	file_mock_v4_config_Cat_service_proto_rawDescOnce.Do(func() {
+		file_mock_v4_config_Cat_service_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_mock_v4_config_Cat_service_proto_rawDesc), len(file_mock_v4_config_Cat_service_proto_rawDesc)))
 	})
-	return file_mock_v4_config_cat_service_proto_rawDescData
+	return file_mock_v4_config_Cat_service_proto_rawDescData
 }
 
-var file_mock_v4_config_cat_service_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
-var file_mock_v4_config_cat_service_proto_goTypes = []any{
-	(*ListCatsArg)(nil),         // 0: mock.v4.config.ListCatsArg
-	(*ListCatsRet)(nil),         // 1: mock.v4.config.ListCatsRet
-	nil,                         // 2: mock.v4.config.ListCatsRet.ReservedEntry
-	(*ListCatsApiResponse)(nil), // 3: mock.v4.config.ListCatsApiResponse
+var file_mock_v4_config_Cat_service_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_mock_v4_config_Cat_service_proto_goTypes = []any{
+	(*ListItemsArg)(nil),         // 0: mock.v4.config.ListItemsArg
+	(*ListItemsRet)(nil),         // 1: mock.v4.config.ListItemsRet
+	nil,                          // 2: mock.v4.config.ListItemsRet.ReservedEntry
+	(*ListItemsApiResponse)(nil), // 3: mock.v4.config.ListItemsApiResponse
 }
-var file_mock_v4_config_cat_service_proto_depIdxs = []int32{
-	3, // 0: mock.v4.config.ListCatsRet.content:type_name -> mock.v4.config.ListCatsApiResponse
-	2, // 1: mock.v4.config.ListCatsRet.reserved:type_name -> mock.v4.config.ListCatsRet.ReservedEntry
-	0, // 2: mock.v4.config.CatService.listCats:input_type -> mock.v4.config.ListCatsArg
-	1, // 3: mock.v4.config.CatService.listCats:output_type -> mock.v4.config.ListCatsRet
+var file_mock_v4_config_Cat_service_proto_depIdxs = []int32{
+	3, // 0: mock.v4.config.ListItemsRet.content:type_name -> mock.v4.config.ListItemsApiResponse
+	2, // 1: mock.v4.config.ListItemsRet.reserved:type_name -> mock.v4.config.ListItemsRet.ReservedEntry
+	0, // 2: mock.v4.config.ItemService.listItems:input_type -> mock.v4.config.ListItemsArg
+	1, // 3: mock.v4.config.ItemService.listItems:output_type -> mock.v4.config.ListItemsRet
 	3, // [3:4] is the sub-list for method output_type
 	2, // [2:3] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
@@ -172,9 +172,9 @@ var file_mock_v4_config_cat_service_proto_depIdxs = []int32{
 	0, // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_mock_v4_config_cat_service_proto_init() }
-func file_mock_v4_config_cat_service_proto_init() {
-	if File_mock_v4_config_cat_service_proto != nil {
+func init() { file_mock_v4_config_Cat_service_proto_init() }
+func file_mock_v4_config_Cat_service_proto_init() {
+	if File_mock_v4_config_Cat_service_proto != nil {
 		return
 	}
 	file_mock_v4_config_config_proto_init()
@@ -182,17 +182,17 @@ func file_mock_v4_config_cat_service_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_mock_v4_config_cat_service_proto_rawDesc), len(file_mock_v4_config_cat_service_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_mock_v4_config_Cat_service_proto_rawDesc), len(file_mock_v4_config_Cat_service_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_mock_v4_config_cat_service_proto_goTypes,
-		DependencyIndexes: file_mock_v4_config_cat_service_proto_depIdxs,
-		MessageInfos:      file_mock_v4_config_cat_service_proto_msgTypes,
+		GoTypes:           file_mock_v4_config_Cat_service_proto_goTypes,
+		DependencyIndexes: file_mock_v4_config_Cat_service_proto_depIdxs,
+		MessageInfos:      file_mock_v4_config_Cat_service_proto_msgTypes,
 	}.Build()
-	File_mock_v4_config_cat_service_proto = out.File
-	file_mock_v4_config_cat_service_proto_goTypes = nil
-	file_mock_v4_config_cat_service_proto_depIdxs = nil
+	File_mock_v4_config_Cat_service_proto = out.File
+	file_mock_v4_config_Cat_service_proto_goTypes = nil
+	file_mock_v4_config_Cat_service_proto_depIdxs = nil
 }

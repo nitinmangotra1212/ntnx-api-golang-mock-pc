@@ -3,7 +3,7 @@
  *
  * Product version: 1.0.0-SNAPSHOT
  *
- * Part of the GoLang Mock API - REST API for Mock Cat Service
+ * Part of the GoLang Mock API - REST API for Mock Item Service
  *
  * (c) 2025 Nutanix Inc.  All rights reserved
  *
@@ -91,11 +91,11 @@ message SchemaValidationErrorWrapper {
   optional mock.v4.error.SchemaValidationError value = 1000;
 }
 /*
- * An error response indicates that the operation has failed either due to a client error(4XX) or server error(5XX). Please look at the HTTP status code and namespace specific error code and error message for further details.
+ * An error response indiitemes that the operation has failed either due to a client error(4XX) or server error(5XX). Please look at the HTTP status code and namespace specific error code and error message for further details.
  */
 message ErrorResponse {
   /*
-   * An error response indicates that the operation has failed either due to a client error(4XX) or server error(5XX). Please look at the HTTP status code and namespace specific error code and error message for further details.
+   * An error response indiitemes that the operation has failed either due to a client error(4XX) or server error(5XX). Please look at the HTTP status code and namespace specific error code and error message for further details.
    */
   oneof error {
     /*
@@ -157,7 +157,7 @@ message SchemaValidationErrorMessage {
   /*
    * The part of the request that failed validation. Validation can fail for path, query parameters, and request body.
    */
-  optional string location = 201;
+  optional string loitemion = 201;
   /*
    * The detailed message for the validation error.
    */

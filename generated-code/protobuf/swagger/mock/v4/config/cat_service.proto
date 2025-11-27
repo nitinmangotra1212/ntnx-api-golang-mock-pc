@@ -3,7 +3,7 @@
  *
  * Product version: 1.0.0-SNAPSHOT
  *
- * Part of the GoLang Mock API - REST API for Mock Cat Service
+ * Part of the GoLang Mock API - REST API for Mock Item Service
  *
  * (c) 2025 Nutanix Inc.  All rights reserved
  *
@@ -22,39 +22,39 @@ import "mock/v4/api_version.proto";
 import "mock/v4/http_method_options.proto";
 import "mock/v4/config/config.proto";
 
-service CatService {
+service ItemService {
     option (ntnx_api_version) = {
     MAJOR: "4",
     MINOR: "1"    };
 
 
   /*
-   * uri: /mock/v4/config/cats
+   * uri: /mock/v4/config/items
    * http method: GET
-   * List cats
-   * List all cats
+   * List items
+   * List all items
    */
-  rpc listCats(ListCatsArg) returns (ListCatsRet) {
+  rpc listItems(ListItemsArg) returns (ListItemsRet) {
     option (ntnx_api_http) = {
-      GET: "/mock/v4/config/cats"
+      GET: "/mock/v4/config/items"
     };
   }
 }
 
 /*
- * message containing all attributes expected in the listCats request
+ * message containing all attributes expected in the listItems request
  */
-message ListCatsArg {
+message ListItemsArg {
 }
 
 /*
- * message containing all attributes expected in the listCats response
+ * message containing all attributes expected in the listItems response
  */
-message ListCatsRet {
+message ListItemsRet {
   /*
    * field containing expected response content
    */
-  optional mock.v4.config.ListCatsApiResponse content = 999;
+  optional mock.v4.config.ListItemsApiResponse content = 999;
   /*
    * map containing headers expected in response
    */

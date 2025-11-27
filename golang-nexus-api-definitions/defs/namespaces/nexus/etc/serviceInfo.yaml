@@ -1,0 +1,8 @@
+port: 8888
+backendServices:
+  - name: golangnexus
+    environments:
+      - platform: pc
+        port: 9090
+        host: localhost
+

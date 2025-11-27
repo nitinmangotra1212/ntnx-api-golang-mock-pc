@@ -1,0 +1,23 @@
+openapi: 3.0.1
+info:
+  title: "GoLang Mock API - REST API for Mock Item Service"
+  version: 1.0.0-SNAPSHOT
+  description: "Mock REST API service for demonstrating Nutanix v4 API standards"
+  x-project-info:
+    prefix: 'mock'
+  x-logo:
+    url: "https://www.nutanix.com/content/dam/nutanix/logos/nutanix/nutanix-neg.png"
+    backgroundColor: "#FFFFFF"
+    altText: "Golang Mock API Logo"
+security:
+  - basicAuthScheme: []
+  - apiKeyAuthScheme: []
+components:
+  securitySchemes:
+    basicAuthScheme:
+      type: "http"
+      scheme: "basic"
+    apiKeyAuthScheme:
+      type: apiKey
+      in: header
+      name: X-ntnx-api-key

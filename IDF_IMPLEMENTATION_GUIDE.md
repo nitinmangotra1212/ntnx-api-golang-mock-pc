@@ -1,44 +1,41 @@
-# IDF Implementation Guide for golang-mock
+# IDF Implementation Guide for Nexus Service
 
 ## What is IDF?
 
 **IDF (Insights Data Format)** is Nutanix's internal database/storage layer used for:
-- **Persistent storage** of entities (domains, BOMs, etc.)
+- **Persistent storage** of entities (items, domains, etc.)
 - **Querying with OData filters** (`$filter`, `$orderby`, `$select`, `$expand`)
 - **Pagination** support
 - **Complex queries** with grouping, sorting, and metrics
 
-## How IDF Works in az-manager
+---
+
+## How IDF Works in az-manager (Reference Implementation)
 
 ### Architecture Pattern
 
 ```
-Service Layer (domain_Services.go)
+Service Layer (item_grpc_service.go)
     ↓
-Repository Interface (db.DomainRepository)
+Repository Interface (db.ItemRepository)
     ↓
-IDF Implementation (idf.DomainRepositoryImpl)
+IDF Implementation (idf.ItemRepositoryImpl)
     ↓
 IDF Client (external/idf/idf_client.go)
     ↓
 Insights Service (go-cache/insights/insights_interface)
 ```
 
-### Key Components
+### Key Components in az-manager
 
 1. **Repository Interface** (`db/domain_repository.go`)
-   ```go
-   type DomainRepository interface {
-       CreateDomain(*models.DomainEntity) error
-       GetDomainById(extId string) (*models.DomainEntity, error)
-       ListDomains(queryParams *models.QueryParams) ([]*lifecycleConfig.Domain, int64, error)
-   }
-   ```
+   - Defines CRUD operations interface
+   - Used by service layer
 
 2. **IDF Repository Implementation** (`idf/idf_domain_repository.go`)
-   - Implements the repository interface
+   - Implements repository interface
    - Converts protobuf models ↔ IDF attributes
-   - Handles Create, Read, List operations
+   - Handles Create, Read, List, Update, Delete operations
 
 3. **IDF Client** (`external/idf/idf_client.go`)
    - Wraps `InsightsService` from `go-cache/insights/insights_interface`
@@ -49,25 +46,13 @@ Insights Service (go-cache/insights/insights_interface)
    - `CreateDataArg()` - Type conversion (string, int, bool, arrays, etc.)
    - `constructIDFQuery()` - Builds IDF queries from OData params
 
-## Do You Need IDF for golang-mock?
+---
 
-### ❌ **You DON'T need IDF if:**
-- ✅ You're fine with **in-memory storage** (current implementation)
-- ✅ You don't need **persistent storage** across restarts
-- ✅ You don't need **complex OData filtering** (simple filtering is fine)
-- ✅ This is a **pure mock service** for testing
-
-### ✅ **You DO need IDF if:**
-- You want **persistent storage** (data survives restarts)
-- You need **OData query support** (`$filter`, `$orderby`, etc.)
-- You want to **integrate with Nutanix IDF infrastructure**
-- You need **complex queries** with grouping/sorting
-
-## What You Need to Do (If Implementing IDF)
+## Implementation Steps for Nexus Service
 
 ### Step 1: Add Dependencies
 
-**File**: `go.mod`
+**File:** `ntnx-api-golang-nexus/go.mod`
 
 ```go
 require (
@@ -77,30 +62,42 @@ require (
 )
 ```
 
+**Command:**
+```bash
+cd ~/ntnx-api-golang-nexus
+go get github.com/nutanix-core/go-cache@v0.0.0-20240613003120-de1e4c3ed003
+go get github.com/nutanix-core/ntnx-api-odata-go@v1.0.27
+go mod tidy
+```
+
+---
+
 ### Step 2: Create Repository Interface
 
-**File**: `golang-mock-service/db/cat_repository.go` (NEW)
+**File:** `golang-nexus-service/db/item_repository.go` (NEW)
 
 ```go
 package db
 
 import (
-    pb "github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/protobuf/mock/v4/config"
-    "github.com/nutanix/ntnx-api-golang-mock/golang-mock-service/models"
+    pb "github.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/protobuf/nexus/v4/config"
+    "github.com/nutanix/ntnx-api-golang-nexus/golang-nexus-service/models"
 )
 
-type CatRepository interface {
-    CreateCat(catEntity *models.CatEntity) error
-    GetCatById(extId string) (*models.CatEntity, error)
-    ListCats(queryParams *models.QueryParams) ([]*pb.Cat, int64, error)
-    UpdateCat(extId string, catEntity *models.CatEntity) error
-    DeleteCat(extId string) error
+type ItemRepository interface {
+    CreateItem(itemEntity *models.ItemEntity) error
+    GetItemById(extId string) (*models.ItemEntity, error)
+    ListItems(queryParams *models.QueryParams) ([]*pb.Item, int64, error)
+    UpdateItem(extId string, itemEntity *models.ItemEntity) error
+    DeleteItem(extId string) error
 }
 ```
 
+---
+
 ### Step 3: Create IDF Client
 
-**File**: `golang-mock-service/external/idf/interface.go` (NEW)
+**File:** `golang-nexus-service/external/idf/interface.go` (NEW)
 
 ```go
 package idf
@@ -120,25 +117,26 @@ type IdfClientImpl struct {
     IdfSvc insights_interface.InsightsServiceInterface
 }
 
-func NewIdfClient(host string, port uint16) IdfClientImpl {
+func NewIdfClient(host string, port uint16) IdfClientIfc {
     IdfService := insights_interface.NewInsightsService(host, port)
-    return IdfClientImpl{
+    return &IdfClientImpl{
         IdfSvc: IdfService,
     }
 }
 ```
 
-**File**: `golang-mock-service/external/idf/idf_client.go` (NEW)
+**File:** `golang-nexus-service/external/idf/idf_client.go` (NEW)
 
 ```go
 package idf
 
 import (
+    "fmt"
     "github.com/nutanix-core/go-cache/insights/insights_interface"
     log "github.com/sirupsen/logrus"
 )
 
-func (idf IdfClientImpl) GetEntityRet(getArg *insights_interface.GetEntitiesArg) (*insights_interface.GetEntitiesRet, error) {
+func (idf *IdfClientImpl) GetEntityRet(getArg *insights_interface.GetEntitiesArg) (*insights_interface.GetEntitiesRet, error) {
     if getArg == nil {
         log.Error("Nil get argument while trying to read from IDF")
         return nil, fmt.Errorf("invalid argument")
@@ -148,7 +146,7 @@ func (idf IdfClientImpl) GetEntityRet(getArg *insights_interface.GetEntitiesArg)
     return getResponse, err
 }
 
-func (idf IdfClientImpl) UpdateEntityRet(updateArg *insights_interface.UpdateEntityArg) (*insights_interface.UpdateEntityRet, error) {
+func (idf *IdfClientImpl) UpdateEntityRet(updateArg *insights_interface.UpdateEntityArg) (*insights_interface.UpdateEntityRet, error) {
     if updateArg == nil {
         log.Error("Invalid update argument")
         return nil, fmt.Errorf("invalid argument")
@@ -158,7 +156,7 @@ func (idf IdfClientImpl) UpdateEntityRet(updateArg *insights_interface.UpdateEnt
     return updateResponse, err
 }
 
-func (idf IdfClientImpl) GetEntitiesWithMetricsRet(getEntitiesWithMetricsArg *insights_interface.GetEntitiesWithMetricsArg) (*insights_interface.GetEntitiesWithMetricsRet, error) {
+func (idf *IdfClientImpl) GetEntitiesWithMetricsRet(getEntitiesWithMetricsArg *insights_interface.GetEntitiesWithMetricsArg) (*insights_interface.GetEntitiesWithMetricsRet, error) {
     if getEntitiesWithMetricsArg == nil {
         log.Error("Invalid getEntitiesWithMetrics argument")
         return nil, fmt.Errorf("invalid argument")
@@ -168,14 +166,16 @@ func (idf IdfClientImpl) GetEntitiesWithMetricsRet(getEntitiesWithMetricsArg *in
     return getResponse, err
 }
 
-func (idf IdfClientImpl) GetInsightsService() insights_interface.InsightsServiceInterface {
+func (idf *IdfClientImpl) GetInsightsService() insights_interface.InsightsServiceInterface {
     return idf.IdfSvc
 }
 ```
 
+---
+
 ### Step 4: Create IDF Utils
 
-**File**: `golang-mock-service/idf/idf_utils.go` (NEW)
+**File:** `golang-nexus-service/idf/idf_utils.go` (NEW)
 
 ```go
 package idf
@@ -196,7 +196,7 @@ func AddAttribute(attributeDataArgList *[]*idfIfc.AttributeDataArg, name string,
     *attributeDataArgList = append(*attributeDataArgList, dataArg)
 }
 
-// CreateDataArg creates a data arg for the given name and value
+// CreateDataArg creates a data arg for the given name and value based on the value type
 func CreateDataArg(name string, value interface{}) *idfIfc.AttributeDataArg {
     dataValue := &idfIfc.DataValue{}
 
@@ -218,18 +218,21 @@ func CreateDataArg(name string, value interface{}) *idfIfc.AttributeDataArg {
         return nil
     }
 
-    return &idfIfc.AttributeDataArg{
+    dataArg := &idfIfc.AttributeDataArg{
         AttributeData: &idfIfc.AttributeData{
             Name:  proto.String(name),
             Value: dataValue,
         },
     }
+    return dataArg
 }
 ```
 
+---
+
 ### Step 5: Create IDF Repository Implementation
 
-**File**: `golang-mock-service/idf/idf_cat_repository.go` (NEW)
+**File:** `golang-nexus-service/idf/idf_item_repository.go` (NEW)
 
 ```go
 package idf
@@ -238,77 +241,77 @@ import (
     "github.com/google/uuid"
     "github.com/nutanix-core/go-cache/insights/insights_interface"
     idfQr "github.com/nutanix-core/go-cache/insights/insights_interface/query"
-    pb "github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/protobuf/mock/v4/config"
-    "github.com/nutanix/ntnx-api-golang-mock/golang-mock-service/db"
-    "github.com/nutanix/ntnx-api-golang-mock/golang-mock-service/external/idf"
-    "github.com/nutanix/ntnx-api-golang-mock/golang-mock-service/models"
+    pb "github.com/nutanix/ntnx-api-golang-nexus-pc/generated-code/protobuf/nexus/v4/config"
+    "github.com/nutanix/ntnx-api-golang-nexus/golang-nexus-service/db"
+    "github.com/nutanix/ntnx-api-golang-nexus/golang-nexus-service/external/idf"
+    "github.com/nutanix/ntnx-api-golang-nexus/golang-nexus-service/models"
     log "github.com/sirupsen/logrus"
     "google.golang.org/protobuf/proto"
 )
 
-type CatRepositoryImpl struct {
+type ItemRepositoryImpl struct {
     idfClient idf.IdfClientIfc
 }
 
 const (
-    catEntityTypeName = "mock_cat"
-    catIdAttr         = "cat_id"
-    catNameAttr       = "cat_name"
-    catTypeAttr       = "cat_type"
-    descriptionAttr   = "description"
+    itemEntityTypeName = "nexus_item"
+    itemIdAttr         = "item_id"
+    itemNameAttr       = "item_name"
+    itemTypeAttr       = "item_type"
+    descriptionAttr    = "description"
 )
 
-func NewCatRepository(idfClient idf.IdfClientIfc) db.CatRepository {
-    return &CatRepositoryImpl{
+func NewItemRepository(idfClient idf.IdfClientIfc) db.ItemRepository {
+    return &ItemRepositoryImpl{
         idfClient: idfClient,
     }
 }
 
-func (r *CatRepositoryImpl) CreateCat(catEntity *models.CatEntity) error {
-    catUuid := uuid.New().String()
+func (r *ItemRepositoryImpl) CreateItem(itemEntity *models.ItemEntity) error {
+    itemUuid := uuid.New().String()
     attributeDataArgList := []*insights_interface.AttributeDataArg{}
 
-    // Add cat attributes
-    if catEntity.Cat.CatId != nil {
-        AddAttribute(&attributeDataArgList, catIdAttr, *catEntity.Cat.CatId)
+    // Add item attributes
+    if itemEntity.Item.ItemId != nil {
+        AddAttribute(&attributeDataArgList, itemIdAttr, *itemEntity.Item.ItemId)
     }
-    if catEntity.Cat.CatName != nil {
-        AddAttribute(&attributeDataArgList, catNameAttr, *catEntity.Cat.CatName)
+    if itemEntity.Item.ItemName != nil {
+        AddAttribute(&attributeDataArgList, itemNameAttr, *itemEntity.Item.ItemName)
     }
-    if catEntity.Cat.CatType != nil {
-        AddAttribute(&attributeDataArgList, catTypeAttr, *catEntity.Cat.CatType)
+    if itemEntity.Item.ItemType != nil {
+        AddAttribute(&attributeDataArgList, itemTypeAttr, *itemEntity.Item.ItemType)
     }
-    if catEntity.Cat.Description != nil {
-        AddAttribute(&attributeDataArgList, descriptionAttr, *catEntity.Cat.Description)
+    if itemEntity.Item.Description != nil {
+        AddAttribute(&attributeDataArgList, descriptionAttr, *itemEntity.Item.Description)
     }
 
     updateArg := &insights_interface.UpdateEntityArg{
         EntityGuid: &insights_interface.EntityGuid{
-            EntityTypeName: proto.String(catEntityTypeName),
-            EntityId:       &catUuid,
+            EntityTypeName: proto.String(itemEntityTypeName),
+            EntityId:       &itemUuid,
         },
         AttributeDataArgList: attributeDataArgList,
     }
 
     _, err := r.idfClient.UpdateEntityRet(updateArg)
     if err != nil {
-        log.Errorf("Failed to create cat: %v", err)
+        log.Errorf("Failed to create item: %v", err)
         return err
     }
 
     // Set extId
-    if catEntity.Cat.Base == nil {
-        catEntity.Cat.Base = &response.ExternalizableAbstractModel{}
+    if itemEntity.Item.Base == nil {
+        itemEntity.Item.Base = &response.ExternalizableAbstractModel{}
     }
-    catEntity.Cat.Base.ExtId = &catUuid
+    itemEntity.Item.Base.ExtId = &itemUuid
 
     return nil
 }
 
-func (r *CatRepositoryImpl) ListCats(queryParams *models.QueryParams) ([]*pb.Cat, int64, error) {
+func (r *ItemRepositoryImpl) ListItems(queryParams *models.QueryParams) ([]*pb.Item, int64, error) {
     // Build IDF query
-    query, err := idfQr.QUERY(catEntityTypeName + "ListQuery").
-        FROM(catEntityTypeName).Proto()
+    query, err := idfQr.QUERY(itemEntityTypeName + "ListQuery").
+        FROM(itemEntityTypeName).Proto()
     if err != nil {
         return nil, 0, err
     }
@@ -329,12 +332,6 @@ func (r *CatRepositoryImpl) ListCats(queryParams *models.QueryParams) ([]*pb.Cat
         Offset: proto.Int64(int64(offset)),
     }
 
-    // Add OData filter if provided
-    if queryParams.Filter != "" {
-        // Parse OData filter and convert to IDF WhereClause
-        // (This requires ntnx-api-odata-go)
-    }
-
     queryArg := &insights_interface.GetEntitiesWithMetricsArg{
         Query: query,
     }
@@ -345,137 +342,135 @@ func (r *CatRepositoryImpl) ListCats(queryParams *models.QueryParams) ([]*pb.Cat
         return nil, 0, err
     }
 
-    // Convert IDF entities to Cat protobufs
-    var cats []*pb.Cat
+    // Convert IDF entities to Item protobufs
+    var items []*pb.Item
     groupResults := queryResponse.GetGroupResultsList()
     if len(groupResults) == 0 {
-        return []*pb.Cat{}, 0, nil
+        return []*pb.Item{}, 0, nil
     }
 
-    entities := ConvertEntitiesWithMetricToEntities(groupResults[0].GetRawResults())
+    entities := groupResults[0].GetRawResults()
     for _, entity := range entities {
-        cat := r.mapIdfAttributeToCat(entity)
-        cats = append(cats, cat)
+        item := r.mapIdfAttributeToItem(entity)
+        items = append(items, item)
     }
 
     totalCount := groupResults[0].GetTotalEntityCount()
-    return cats, totalCount, nil
+    return items, totalCount, nil
 }
 
-func (r *CatRepositoryImpl) mapIdfAttributeToCat(entity *insights_interface.Entity) *pb.Cat {
-    cat := &pb.Cat{}
+func (r *ItemRepositoryImpl) mapIdfAttributeToItem(entity *insights_interface.Entity) *pb.Item {
+    item := &pb.Item{}
     for _, attr := range entity.GetAttributeDataMap() {
         switch attr.GetName() {
-        case catIdAttr:
+        case itemIdAttr:
             val := int32(attr.GetValue().GetInt64Value())
-            cat.CatId = &val
-        case catNameAttr:
+            item.ItemId = &val
+        case itemNameAttr:
             val := attr.GetValue().GetStrValue()
-            cat.CatName = &val
-        case catTypeAttr:
+            item.ItemName = &val
+        case itemTypeAttr:
             val := attr.GetValue().GetStrValue()
-            cat.CatType = &val
+            item.ItemType = &val
         case descriptionAttr:
             val := attr.GetValue().GetStrValue()
-            cat.Description = &val
+            item.Description = &val
         }
     }
-    return cat
+    return item
 }
 ```
+
+---
 
 ### Step 6: Update Service to Use Repository
 
-**File**: `golang-mock-service/grpc/cat_grpc_service.go`
+**File:** `golang-nexus-service/grpc/item_grpc_service.go`
 
-```go
-// Replace in-memory map with repository
-type CatGrpcService struct {
-    pb.UnimplementedCatServiceServer
-    catRepository db.CatRepository  // ← Add this
-}
+Replace in-memory map with repository pattern (similar to az-manager).
 
-func NewCatGrpcService(catRepository db.CatRepository) *CatGrpcService {
-    return &CatGrpcService{
-        catRepository: catRepository,
-    }
-}
-
-func (s *CatGrpcService) ListCats(ctx context.Context, req *pb.ListCatsArg) (*pb.ListCatsRet, error) {
-    // Convert request to QueryParams
-    queryParams := &models.QueryParams{
-        Page:   req.GetXPage(),
-        Limit:  req.GetXLimit(),
-        Filter: req.GetXFilter(),
-        // ... other params
-    }
-
-    // Use repository instead of in-memory map
-    cats, totalCount, err := s.catRepository.ListCats(queryParams)
-    if err != nil {
-        return nil, err
-    }
-
-    // Create response with metadata
-    isPaginated := req.GetXPage() > 0 || req.GetXLimit() > 0
-    apiUrl := responseUtils.GetApiUrl(ctx, queryParams.Filter, "", "", &queryParams.Limit, &queryParams.Page)
-    paginationLinks := responseUtils.GetPaginationLinks(totalCount, apiUrl)
-    
-    return responseUtils.CreateListCatsResponse(cats, paginationLinks, isPaginated, int32(totalCount)), nil
-}
-```
+---
 
 ### Step 7: Initialize IDF Client in Main
 
-**File**: `golang-mock-service/server/main.go`
+**File:** `golang-nexus-service/server/main.go`
 
 ```go
 import (
-    "github.com/nutanix/ntnx-api-golang-mock/golang-mock-service/external/idf"
-    "github.com/nutanix/ntnx-api-golang-mock/golang-mock-service/idf"
-    "github.com/nutanix/ntnx-api-golang-mock/golang-mock-service/db"
+    "github.com/nutanix/ntnx-api-golang-nexus/golang-nexus-service/external/idf"
+    idfRepo "github.com/nutanix/ntnx-api-golang-nexus/golang-nexus-service/idf"
+    "github.com/nutanix/ntnx-api-golang-nexus/golang-nexus-service/db"
 )
 
 func main() {
     // ... existing code ...
 
-    // Initialize IDF client (if using IDF)
+    // Initialize IDF client
     idfClient := idf.NewIdfClient("localhost", 9876)  // Adjust host/port as needed
-    catRepository := idf.NewCatRepository(idfClient)
+    itemRepository := idfRepo.NewItemRepository(idfClient)
 
     // Pass repository to service
-    catService := grpc.NewCatGrpcService(catRepository)
+    itemService := grpc.NewItemGrpcService(itemRepository)
     
     // ... rest of code ...
 }
 ```
 
-## Summary: What You Need to Do
+---
 
-### If You DON'T Need IDF (Recommended for Mock):
-- ✅ **Nothing!** Your current in-memory implementation is fine
-- ✅ Keep using the `map[int32]*pb.Cat` approach
-- ✅ Simple and works for mocking/testing
+## IDF Setup on PC
 
-### If You DO Need IDF:
-1. ✅ Add dependencies (`go-cache`, `ntnx-api-odata-go`)
-2. ✅ Create repository interface (`db/cat_repository.go`)
-3. ✅ Create IDF client (`external/idf/`)
-4. ✅ Create IDF utils (`idf/idf_utils.go`)
-5. ✅ Create IDF repository implementation (`idf/idf_cat_repository.go`)
-6. ✅ Update service to use repository instead of map
-7. ✅ Initialize IDF client in `main.go`
+### Entity Type Name
 
-## Recommendation
+**Important:** The entity type name must match what's configured in IDF on PC.
 
-**For a mock service, you probably DON'T need IDF** unless:
-- You need persistent storage
-- You need OData query support
-- You're integrating with Nutanix infrastructure
+**Example from az-manager:**
+- Domain entity: `"nim_domain"`
+- BOM entity: `"nim_bom"`
 
-**Your current in-memory approach is simpler and sufficient for mocking!**
+**For Nexus:**
+- Item entity: `"nexus_item"` (or as configured in your IDF setup script)
 
 ---
 
-**Last Updated**: 2025-01-26
+## PC Setup Script
+
+You mentioned you have a script to run on PC to create IDF tables/schema. This script should:
+
+1. **Define Entity Type:** Create entity type `nexus_item` in IDF
+2. **Define Attributes:** Define all attributes (item_id, item_name, item_type, description, etc.)
+3. **Set Permissions:** Configure access permissions if needed
+
+**Typical script structure:**
+```bash
+#!/bin/bash
+# setup_nexus_idf.sh
+
+# Create entity type
+# Define attributes
+# Set up indexes if needed
+```
+
+---
+
+## Next Steps
+
+1. **Review your PC setup script** - Share it and we can integrate it
+2. **Implement repository pattern** - Follow az-manager pattern
+3. **Test IDF connection** - Verify connectivity to IDF service
+4. **Migrate data** - Move from in-memory to IDF storage
+
+---
+
+## Reference Files from az-manager
+
+- `az-manager-service/external/idf/idf_client.go` - IDF client implementation
+- `az-manager-service/external/idf/interface.go` - IDF client interface
+- `az-manager-service/idf/idf_utils.go` - IDF utility functions
+- `az-manager-service/idf/idf_domain_repository.go` - Domain repository implementation
+- `az-manager-service/db/domain_repository.go` - Repository interface
+
+---
+
+**Last Updated:** November 27, 2025
 

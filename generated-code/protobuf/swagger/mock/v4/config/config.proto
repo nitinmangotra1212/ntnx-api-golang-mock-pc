@@ -3,7 +3,7 @@
  *
  * Product version: 1.0.0-SNAPSHOT
  *
- * Part of the GoLang Mock API - REST API for Mock Cat Service
+ * Part of the GoLang Mock API - REST API for Mock Item Service
  *
  * (c) 2025 Nutanix Inc.  All rights reserved
  *
@@ -31,33 +31,33 @@ message ObjectMapWrapper {
   map<string, google.protobuf.Any> value = 1000;
 }
 /*
- * Cat entity for mock REST API
+ * Item entity for mock REST API
  */
-message Cat {
+message Item {
   /*
-   * Unique identifier for the cat
+   * Unique identifier for the item
    */
-  optional int32 cat_id = 2001;
+  optional int32 item_id = 2001;
   /*
-   * Name of the cat
+   * Name of the item
    */
-  optional string cat_name = 2002;
+  optional string item_name = 2002;
   /*
-   * Type of cat
+   * Type of item
    */
-  optional string cat_type = 2003;
+  optional string item_type = 2003;
   /*
-   * Description of the cat
+   * Description of the item
    */
   optional string description = 2004;
   /*
-   * Path to cat image file
+   * Path to item image file
    */
-  optional string cat_image_file = 2005;
+  optional string item_image_file = 2005;
   /*
    * 
    */
-  optional mock.v4.config.Location location = 2006;
+  optional mock.v4.config.Loitemion loitemion = 2006;
   /*
    * 
    */
@@ -79,11 +79,11 @@ message Country {
 /*
  * OneOf item wrapper message
  */
-message CatArrayWrapper {
+message ItemArrayWrapper {
   /*
    * Value field in oneOf item wrapper message
    */
-  repeated mock.v4.config.Cat value = 1000;
+  repeated mock.v4.config.Item value = 1000;
 }
 /*
  * OneOf item wrapper message
@@ -95,17 +95,17 @@ message ErrorResponseWrapper {
   optional mock.v4.error.ErrorResponse value = 1000;
 }
 /*
- * REST response for all response codes in API path /mock/v4.1/config/cats Get operation
+ * REST response for all response codes in API path /mock/v4.1/config/items Get operation
  */
-message ListCatsApiResponse {
+message ListItemsApiResponse {
   /*
-   * REST response for all response codes in API path /mock/v4.1/config/cats Get operation
+   * REST response for all response codes in API path /mock/v4.1/config/items Get operation
    */
   oneof data {
     /*
      * 
      */
-    mock.v4.config.CatArrayWrapper cat_array_data = 2001;
+    mock.v4.config.ItemArrayWrapper item_array_data = 2001;
     /*
      * 
      */
@@ -121,9 +121,9 @@ message ListCatsApiResponse {
   optional mock.v4.config.ObjectMapWrapper _reserved = 900000;
 }
 /*
- * Geographical location information
+ * Geographical loitemion information
  */
-message Location {
+message Loitemion {
   /*
    * 
    */

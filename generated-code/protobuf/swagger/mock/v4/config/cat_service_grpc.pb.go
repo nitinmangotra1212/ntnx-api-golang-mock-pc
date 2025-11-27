@@ -3,7 +3,7 @@
 //
 // Product version: 1.0.0-SNAPSHOT
 //
-// Part of the GoLang Mock API - REST API for Mock Cat Service
+// Part of the GoLang Mock API - REST API for Mock Item Service
 //
 // (c) 2025 Nutanix Inc.  All rights reserved
 //
@@ -12,7 +12,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v6.33.0
-// source: mock/v4/config/cat_service.proto
+// source: mock/v4/config/Cat_service.proto
 
 package config
 
@@ -29,111 +29,111 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CatService_ListCats_FullMethodName = "/mock.v4.config.CatService/listCats"
+	ItemService_ListItems_FullMethodName = "/mock.v4.config.ItemService/listItems"
 )
 
-// CatServiceClient is the client API for CatService service.
+// ItemServiceClient is the client API for ItemService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type CatServiceClient interface {
-	// uri: /mock/v4/config/cats
+type ItemServiceClient interface {
+	// uri: /mock/v4/config/items
 	// http method: GET
-	// List cats
-	// List all cats
-	ListCats(ctx context.Context, in *ListCatsArg, opts ...grpc.CallOption) (*ListCatsRet, error)
+	// List items
+	// List all items
+	ListItems(ctx context.Context, in *ListItemsArg, opts ...grpc.CallOption) (*ListItemsRet, error)
 }
 
-type catServiceClient struct {
+type itemServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewCatServiceClient(cc grpc.ClientConnInterface) CatServiceClient {
-	return &catServiceClient{cc}
+func NewItemServiceClient(cc grpc.ClientConnInterface) ItemServiceClient {
+	return &itemServiceClient{cc}
 }
 
-func (c *catServiceClient) ListCats(ctx context.Context, in *ListCatsArg, opts ...grpc.CallOption) (*ListCatsRet, error) {
+func (c *itemServiceClient) ListItems(ctx context.Context, in *ListItemsArg, opts ...grpc.CallOption) (*ListItemsRet, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListCatsRet)
-	err := c.cc.Invoke(ctx, CatService_ListCats_FullMethodName, in, out, cOpts...)
+	out := new(ListItemsRet)
+	err := c.cc.Invoke(ctx, ItemService_ListItems_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// CatServiceServer is the server API for CatService service.
-// All implementations must embed UnimplementedCatServiceServer
+// ItemServiceServer is the server API for ItemService service.
+// All implementations must embed UnimplementedItemServiceServer
 // for forward compatibility.
-type CatServiceServer interface {
-	// uri: /mock/v4/config/cats
+type ItemServiceServer interface {
+	// uri: /mock/v4/config/items
 	// http method: GET
-	// List cats
-	// List all cats
-	ListCats(context.Context, *ListCatsArg) (*ListCatsRet, error)
-	mustEmbedUnimplementedCatServiceServer()
+	// List items
+	// List all items
+	ListItems(context.Context, *ListItemsArg) (*ListItemsRet, error)
+	mustEmbedUnimplementedItemServiceServer()
 }
 
-// UnimplementedCatServiceServer must be embedded to have
+// UnimplementedItemServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedCatServiceServer struct{}
+type UnimplementedItemServiceServer struct{}
 
-func (UnimplementedCatServiceServer) ListCats(context.Context, *ListCatsArg) (*ListCatsRet, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListCats not implemented")
+func (UnimplementedItemServiceServer) ListItems(context.Context, *ListItemsArg) (*ListItemsRet, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListItems not implemented")
 }
-func (UnimplementedCatServiceServer) mustEmbedUnimplementedCatServiceServer() {}
-func (UnimplementedCatServiceServer) testEmbeddedByValue()                    {}
+func (UnimplementedItemServiceServer) mustEmbedUnimplementedItemServiceServer() {}
+func (UnimplementedItemServiceServer) testEmbeddedByValue()                     {}
 
-// UnsafeCatServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to CatServiceServer will
+// UnsafeItemServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ItemServiceServer will
 // result in compilation errors.
-type UnsafeCatServiceServer interface {
-	mustEmbedUnimplementedCatServiceServer()
+type UnsafeItemServiceServer interface {
+	mustEmbedUnimplementedItemServiceServer()
 }
 
-func RegisterCatServiceServer(s grpc.ServiceRegistrar, srv CatServiceServer) {
-	// If the following call pancis, it indicates UnimplementedCatServiceServer was
+func RegisterItemServiceServer(s grpc.ServiceRegistrar, srv ItemServiceServer) {
+	// If the following call pancis, it indicates UnimplementedItemServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&CatService_ServiceDesc, srv)
+	s.RegisterService(&ItemService_ServiceDesc, srv)
 }
 
-func _CatService_ListCats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListCatsArg)
+func _ItemService_ListItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListItemsArg)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CatServiceServer).ListCats(ctx, in)
+		return srv.(ItemServiceServer).ListItems(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CatService_ListCats_FullMethodName,
+		FullMethod: ItemService_ListItems_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CatServiceServer).ListCats(ctx, req.(*ListCatsArg))
+		return srv.(ItemServiceServer).ListItems(ctx, req.(*ListItemsArg))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// CatService_ServiceDesc is the grpc.ServiceDesc for CatService service.
+// ItemService_ServiceDesc is the grpc.ServiceDesc for ItemService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var CatService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "mock.v4.config.CatService",
-	HandlerType: (*CatServiceServer)(nil),
+var ItemService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "mock.v4.config.ItemService",
+	HandlerType: (*ItemServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "listCats",
-			Handler:    _CatService_ListCats_Handler,
+			MethodName: "listItems",
+			Handler:    _ItemService_ListItems_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "github.com/nutanix/ntnx-api-golang-mock-pc/generated-code/protobuf/mock/v4/config/cat_service.proto",
+	Metadata: "mock/v4/config/Cat_service.proto",
 }
