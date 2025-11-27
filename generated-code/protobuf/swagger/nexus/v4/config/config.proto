@@ -31,19 +31,6 @@ message ObjectMapWrapper {
   map<string, google.protobuf.Any> value = 1000;
 }
 /*
- * Country information
- */
-message Country {
-  /*
-   * State or province name
-   */
-  optional string state = 2001;
-  /*
-   * 
-   */
-  optional nexus.v4.config.ObjectMapWrapper _reserved = 900000;
-}
-/*
  * Item entity for mock REST API
  */
 message Item {
@@ -64,13 +51,9 @@ message Item {
    */
   optional string description = 2004;
   /*
-   * Path to item image file
+   * External identifier for the item (UUID)
    */
-  optional string item_image_file = 2005;
-  /*
-   * 
-   */
-  optional nexus.v4.config.Location location = 2006;
+  optional string ext_id = 2005;
   /*
    * 
    */
@@ -115,27 +98,6 @@ message ListItemsApiResponse {
    * 
    */
   optional common.v1.response.ApiResponseMetadata metadata = 1001;
-  /*
-   * 
-   */
-  optional nexus.v4.config.ObjectMapWrapper _reserved = 900000;
-}
-/*
- * Geographical location information
- */
-message Location {
-  /*
-   * 
-   */
-  optional nexus.v4.config.Country country = 2001;
-  /*
-   * City name
-   */
-  optional string city = 2002;
-  /*
-   * ZIP or postal code
-   */
-  optional string zip = 2003;
   /*
    * 
    */

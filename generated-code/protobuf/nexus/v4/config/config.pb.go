@@ -80,60 +80,6 @@ func (x *ObjectMapWrapper) GetValue() map[string]*anypb.Any {
 	return nil
 }
 
-// Country information
-type Country struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	// State or province name
-	State *string `protobuf:"bytes,2001,opt,name=state" json:"state,omitempty"`
-	XReserved     *ObjectMapWrapper `protobuf:"bytes,900000,opt,name=_reserved,json=Reserved" json:"_reserved,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Country) Reset() {
-	*x = Country{}
-	mi := &file_nexus_v4_config_config_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Country) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Country) ProtoMessage() {}
-
-func (x *Country) ProtoReflect() protoreflect.Message {
-	mi := &file_nexus_v4_config_config_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Country.ProtoReflect.Descriptor instead.
-func (*Country) Descriptor() ([]byte, []int) {
-	return file_nexus_v4_config_config_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *Country) GetState() string {
-	if x != nil && x.State != nil {
-		return *x.State
-	}
-	return ""
-}
-
-func (x *Country) GetXReserved() *ObjectMapWrapper {
-	if x != nil {
-		return x.XReserved
-	}
-	return nil
-}
-
 // Item entity for mock REST API
 type Item struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -145,9 +91,8 @@ type Item struct {
 	ItemType *string `protobuf:"bytes,2003,opt,name=item_type,json=itemType" json:"item_type,omitempty"`
 	// Description of the item
 	Description *string `protobuf:"bytes,2004,opt,name=description" json:"description,omitempty"`
-	// Path to item image file
-	ItemImageFile *string `protobuf:"bytes,2005,opt,name=item_image_file,json=itemImageFile" json:"item_image_file,omitempty"`
-	Location *Location `protobuf:"bytes,2006,opt,name=location" json:"location,omitempty"`
+	// External identifier for the item (UUID)
+	ExtId *string `protobuf:"bytes,2005,opt,name=ext_id,json=extId" json:"ext_id,omitempty"`
 	XReserved     *ObjectMapWrapper `protobuf:"bytes,900000,opt,name=_reserved,json=Reserved" json:"_reserved,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -155,7 +100,7 @@ type Item struct {
 
 func (x *Item) Reset() {
 	*x = Item{}
-	mi := &file_nexus_v4_config_config_proto_msgTypes[2]
+	mi := &file_nexus_v4_config_config_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -167,7 +112,7 @@ func (x *Item) String() string {
 func (*Item) ProtoMessage() {}
 
 func (x *Item) ProtoReflect() protoreflect.Message {
-	mi := &file_nexus_v4_config_config_proto_msgTypes[2]
+	mi := &file_nexus_v4_config_config_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -180,7 +125,7 @@ func (x *Item) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Item.ProtoReflect.Descriptor instead.
 func (*Item) Descriptor() ([]byte, []int) {
-	return file_nexus_v4_config_config_proto_rawDescGZIP(), []int{2}
+	return file_nexus_v4_config_config_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Item) GetItemId() int32 {
@@ -211,18 +156,11 @@ func (x *Item) GetDescription() string {
 	return ""
 }
 
-func (x *Item) GetItemImageFile() string {
-	if x != nil && x.ItemImageFile != nil {
-		return *x.ItemImageFile
+func (x *Item) GetExtId() string {
+	if x != nil && x.ExtId != nil {
+		return *x.ExtId
 	}
 	return ""
-}
-
-func (x *Item) GetLocation() *Location {
-	if x != nil {
-		return x.Location
-	}
-	return nil
 }
 
 func (x *Item) GetXReserved() *ObjectMapWrapper {
@@ -243,7 +181,7 @@ type ItemArrayWrapper struct {
 
 func (x *ItemArrayWrapper) Reset() {
 	*x = ItemArrayWrapper{}
-	mi := &file_nexus_v4_config_config_proto_msgTypes[3]
+	mi := &file_nexus_v4_config_config_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -255,7 +193,7 @@ func (x *ItemArrayWrapper) String() string {
 func (*ItemArrayWrapper) ProtoMessage() {}
 
 func (x *ItemArrayWrapper) ProtoReflect() protoreflect.Message {
-	mi := &file_nexus_v4_config_config_proto_msgTypes[3]
+	mi := &file_nexus_v4_config_config_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -268,7 +206,7 @@ func (x *ItemArrayWrapper) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ItemArrayWrapper.ProtoReflect.Descriptor instead.
 func (*ItemArrayWrapper) Descriptor() ([]byte, []int) {
-	return file_nexus_v4_config_config_proto_rawDescGZIP(), []int{3}
+	return file_nexus_v4_config_config_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ItemArrayWrapper) GetValue() []*Item {
@@ -289,7 +227,7 @@ type ErrorResponseWrapper struct {
 
 func (x *ErrorResponseWrapper) Reset() {
 	*x = ErrorResponseWrapper{}
-	mi := &file_nexus_v4_config_config_proto_msgTypes[4]
+	mi := &file_nexus_v4_config_config_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -301,7 +239,7 @@ func (x *ErrorResponseWrapper) String() string {
 func (*ErrorResponseWrapper) ProtoMessage() {}
 
 func (x *ErrorResponseWrapper) ProtoReflect() protoreflect.Message {
-	mi := &file_nexus_v4_config_config_proto_msgTypes[4]
+	mi := &file_nexus_v4_config_config_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -314,7 +252,7 @@ func (x *ErrorResponseWrapper) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ErrorResponseWrapper.ProtoReflect.Descriptor instead.
 func (*ErrorResponseWrapper) Descriptor() ([]byte, []int) {
-	return file_nexus_v4_config_config_proto_rawDescGZIP(), []int{4}
+	return file_nexus_v4_config_config_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ErrorResponseWrapper) GetValue() *error1.ErrorResponse {
@@ -342,7 +280,7 @@ type ListItemsApiResponse struct {
 
 func (x *ListItemsApiResponse) Reset() {
 	*x = ListItemsApiResponse{}
-	mi := &file_nexus_v4_config_config_proto_msgTypes[5]
+	mi := &file_nexus_v4_config_config_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -354,7 +292,7 @@ func (x *ListItemsApiResponse) String() string {
 func (*ListItemsApiResponse) ProtoMessage() {}
 
 func (x *ListItemsApiResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_nexus_v4_config_config_proto_msgTypes[5]
+	mi := &file_nexus_v4_config_config_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -367,7 +305,7 @@ func (x *ListItemsApiResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListItemsApiResponse.ProtoReflect.Descriptor instead.
 func (*ListItemsApiResponse) Descriptor() ([]byte, []int) {
-	return file_nexus_v4_config_config_proto_rawDescGZIP(), []int{5}
+	return file_nexus_v4_config_config_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ListItemsApiResponse) GetData() isListItemsApiResponse_Data {
@@ -425,77 +363,6 @@ func (*ListItemsApiResponse_ItemArrayData) isListItemsApiResponse_Data() {}
 
 func (*ListItemsApiResponse_ErrorResponseData) isListItemsApiResponse_Data() {}
 
-// Geographical location information
-type Location struct {
-	state protoimpl.MessageState `protogen:"open.v1"`
-	Country *Country `protobuf:"bytes,2001,opt,name=country" json:"country,omitempty"`
-	// City name
-	City *string `protobuf:"bytes,2002,opt,name=city" json:"city,omitempty"`
-	// ZIP or postal code
-	Zip *string `protobuf:"bytes,2003,opt,name=zip" json:"zip,omitempty"`
-	XReserved     *ObjectMapWrapper `protobuf:"bytes,900000,opt,name=_reserved,json=Reserved" json:"_reserved,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Location) Reset() {
-	*x = Location{}
-	mi := &file_nexus_v4_config_config_proto_msgTypes[6]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Location) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Location) ProtoMessage() {}
-
-func (x *Location) ProtoReflect() protoreflect.Message {
-	mi := &file_nexus_v4_config_config_proto_msgTypes[6]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Location.ProtoReflect.Descriptor instead.
-func (*Location) Descriptor() ([]byte, []int) {
-	return file_nexus_v4_config_config_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *Location) GetCountry() *Country {
-	if x != nil {
-		return x.Country
-	}
-	return nil
-}
-
-func (x *Location) GetCity() string {
-	if x != nil && x.City != nil {
-		return *x.City
-	}
-	return ""
-}
-
-func (x *Location) GetZip() string {
-	if x != nil && x.Zip != nil {
-		return *x.Zip
-	}
-	return ""
-}
-
-func (x *Location) GetXReserved() *ObjectMapWrapper {
-	if x != nil {
-		return x.XReserved
-	}
-	return nil
-}
-
 var File_nexus_v4_config_config_proto protoreflect.FileDescriptor
 
 const file_nexus_v4_config_config_proto_rawDesc = "" +
@@ -506,17 +373,13 @@ const file_nexus_v4_config_config_proto_rawDesc = "" +
 	"\n" +
 	"ValueEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"b\n" +
-	"\aCountry\x12\x15\n" +
-	"\x05state\x18\xd1\x0f \x01(\tR\x05state\x12@\n" +
-	"\t_reserved\x18\xa0\xf76 \x01(\v2!.nexus.v4.config.ObjectMapWrapperR\bReserved\"\xa2\x02\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xd9\x01\n" +
 	"\x04Item\x12\x18\n" +
 	"\aitem_id\x18\xd1\x0f \x01(\x05R\x06itemId\x12\x1c\n" +
 	"\titem_name\x18\xd2\x0f \x01(\tR\bitemName\x12\x1c\n" +
 	"\titem_type\x18\xd3\x0f \x01(\tR\bitemType\x12!\n" +
-	"\vdescription\x18\xd4\x0f \x01(\tR\vdescription\x12'\n" +
-	"\x0fitem_image_file\x18\xd5\x0f \x01(\tR\ritemImageFile\x126\n" +
-	"\blocation\x18\xd6\x0f \x01(\v2\x19.nexus.v4.config.LocationR\blocation\x12@\n" +
+	"\vdescription\x18\xd4\x0f \x01(\tR\vdescription\x12\x16\n" +
+	"\x06ext_id\x18\xd5\x0f \x01(\tR\x05extId\x12@\n" +
 	"\t_reserved\x18\xa0\xf76 \x01(\v2!.nexus.v4.config.ObjectMapWrapperR\bReserved\"@\n" +
 	"\x10ItemArrayWrapper\x12,\n" +
 	"\x05value\x18\xe8\a \x03(\v2\x15.nexus.v4.config.ItemR\x05value\"L\n" +
@@ -527,12 +390,7 @@ const file_nexus_v4_config_config_proto_rawDesc = "" +
 	"\x13error_response_data\x18\x90\x03 \x01(\v2%.nexus.v4.config.ErrorResponseWrapperH\x00R\x11errorResponseData\x12D\n" +
 	"\bmetadata\x18\xe9\a \x01(\v2'.common.v1.response.ApiResponseMetadataR\bmetadata\x12@\n" +
 	"\t_reserved\x18\xa0\xf76 \x01(\v2!.nexus.v4.config.ObjectMapWrapperR\bReservedB\x06\n" +
-	"\x04data\"\xa9\x01\n" +
-	"\bLocation\x123\n" +
-	"\acountry\x18\xd1\x0f \x01(\v2\x18.nexus.v4.config.CountryR\acountry\x12\x13\n" +
-	"\x04city\x18\xd2\x0f \x01(\tR\x04city\x12\x11\n" +
-	"\x03zip\x18\xd3\x0f \x01(\tR\x03zip\x12@\n" +
-	"\t_reserved\x18\xa0\xf76 \x01(\v2!.nexus.v4.config.ObjectMapWrapperR\bReservedB$\n" +
+	"\x04dataB$\n" +
 	"\x0fnexus.v4.configP\x01Z\x0fnexus/v4/config"
 
 var (
@@ -547,39 +405,33 @@ func file_nexus_v4_config_config_proto_rawDescGZIP() []byte {
 	return file_nexus_v4_config_config_proto_rawDescData
 }
 
-var file_nexus_v4_config_config_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_nexus_v4_config_config_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_nexus_v4_config_config_proto_goTypes = []any{
 	(*ObjectMapWrapper)(nil),             // 0: nexus.v4.config.ObjectMapWrapper
-	(*Country)(nil),                      // 1: nexus.v4.config.Country
-	(*Item)(nil),                         // 2: nexus.v4.config.Item
-	(*ItemArrayWrapper)(nil),             // 3: nexus.v4.config.ItemArrayWrapper
-	(*ErrorResponseWrapper)(nil),         // 4: nexus.v4.config.ErrorResponseWrapper
-	(*ListItemsApiResponse)(nil),         // 5: nexus.v4.config.ListItemsApiResponse
-	(*Location)(nil),                     // 6: nexus.v4.config.Location
-	nil,                                  // 7: nexus.v4.config.ObjectMapWrapper.ValueEntry
-	(*error1.ErrorResponse)(nil),         // 8: nexus.v4.error.ErrorResponse
-	(*response.ApiResponseMetadata)(nil), // 9: common.v1.response.ApiResponseMetadata
-	(*anypb.Any)(nil),                    // 10: google.protobuf.Any
+	(*Item)(nil),                         // 1: nexus.v4.config.Item
+	(*ItemArrayWrapper)(nil),             // 2: nexus.v4.config.ItemArrayWrapper
+	(*ErrorResponseWrapper)(nil),         // 3: nexus.v4.config.ErrorResponseWrapper
+	(*ListItemsApiResponse)(nil),         // 4: nexus.v4.config.ListItemsApiResponse
+	nil,                                  // 5: nexus.v4.config.ObjectMapWrapper.ValueEntry
+	(*error1.ErrorResponse)(nil),         // 6: nexus.v4.error.ErrorResponse
+	(*response.ApiResponseMetadata)(nil), // 7: common.v1.response.ApiResponseMetadata
+	(*anypb.Any)(nil),                    // 8: google.protobuf.Any
 }
 var file_nexus_v4_config_config_proto_depIdxs = []int32{
-	7,  // 0: nexus.v4.config.ObjectMapWrapper.value:type_name -> nexus.v4.config.ObjectMapWrapper.ValueEntry
-	0,  // 1: nexus.v4.config.Country._reserved:type_name -> nexus.v4.config.ObjectMapWrapper
-	6,  // 2: nexus.v4.config.Item.location:type_name -> nexus.v4.config.Location
-	0,  // 3: nexus.v4.config.Item._reserved:type_name -> nexus.v4.config.ObjectMapWrapper
-	2,  // 4: nexus.v4.config.ItemArrayWrapper.value:type_name -> nexus.v4.config.Item
-	8,  // 5: nexus.v4.config.ErrorResponseWrapper.value:type_name -> nexus.v4.error.ErrorResponse
-	3,  // 6: nexus.v4.config.ListItemsApiResponse.item_array_data:type_name -> nexus.v4.config.ItemArrayWrapper
-	4,  // 7: nexus.v4.config.ListItemsApiResponse.error_response_data:type_name -> nexus.v4.config.ErrorResponseWrapper
-	9,  // 8: nexus.v4.config.ListItemsApiResponse.metadata:type_name -> common.v1.response.ApiResponseMetadata
-	0,  // 9: nexus.v4.config.ListItemsApiResponse._reserved:type_name -> nexus.v4.config.ObjectMapWrapper
-	1,  // 10: nexus.v4.config.Location.country:type_name -> nexus.v4.config.Country
-	0,  // 11: nexus.v4.config.Location._reserved:type_name -> nexus.v4.config.ObjectMapWrapper
-	10, // 12: nexus.v4.config.ObjectMapWrapper.ValueEntry.value:type_name -> google.protobuf.Any
-	13, // [13:13] is the sub-list for method output_type
-	13, // [13:13] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	5, // 0: nexus.v4.config.ObjectMapWrapper.value:type_name -> nexus.v4.config.ObjectMapWrapper.ValueEntry
+	0, // 1: nexus.v4.config.Item._reserved:type_name -> nexus.v4.config.ObjectMapWrapper
+	1, // 2: nexus.v4.config.ItemArrayWrapper.value:type_name -> nexus.v4.config.Item
+	6, // 3: nexus.v4.config.ErrorResponseWrapper.value:type_name -> nexus.v4.error.ErrorResponse
+	2, // 4: nexus.v4.config.ListItemsApiResponse.item_array_data:type_name -> nexus.v4.config.ItemArrayWrapper
+	3, // 5: nexus.v4.config.ListItemsApiResponse.error_response_data:type_name -> nexus.v4.config.ErrorResponseWrapper
+	7, // 6: nexus.v4.config.ListItemsApiResponse.metadata:type_name -> common.v1.response.ApiResponseMetadata
+	0, // 7: nexus.v4.config.ListItemsApiResponse._reserved:type_name -> nexus.v4.config.ObjectMapWrapper
+	8, // 8: nexus.v4.config.ObjectMapWrapper.ValueEntry.value:type_name -> google.protobuf.Any
+	9, // [9:9] is the sub-list for method output_type
+	9, // [9:9] is the sub-list for method input_type
+	9, // [9:9] is the sub-list for extension type_name
+	9, // [9:9] is the sub-list for extension extendee
+	0, // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_nexus_v4_config_config_proto_init() }
@@ -587,7 +439,7 @@ func file_nexus_v4_config_config_proto_init() {
 	if File_nexus_v4_config_config_proto != nil {
 		return
 	}
-	file_nexus_v4_config_config_proto_msgTypes[5].OneofWrappers = []any{
+	file_nexus_v4_config_config_proto_msgTypes[4].OneofWrappers = []any{
 		(*ListItemsApiResponse_ItemArrayData)(nil),
 		(*ListItemsApiResponse_ErrorResponseData)(nil),
 	}
@@ -597,7 +449,7 @@ func file_nexus_v4_config_config_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_nexus_v4_config_config_proto_rawDesc), len(file_nexus_v4_config_config_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
